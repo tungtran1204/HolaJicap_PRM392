@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="input_style">
+        <item name="android:textColor">#74FFFFFF</item>
+        <item name="android:textColorHint">#B3B5BD</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:backgroundTint">#D4CDDE</item>
+    </style>
+    <style name="edt_style">
+        <item name="android:textColor">#D5FFFFFF</item>
+        <item name="android:textColorHint">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="btn_style">
+        <item name="android:backgroundTint">@color/green</item>
+    </style>
+</resources>
