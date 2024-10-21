@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private Runnable runnable;
     private int currentPage = 0;
-
+    // 2ndTest
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
