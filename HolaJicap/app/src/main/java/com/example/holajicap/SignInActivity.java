@@ -6,17 +6,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.room.Room;
+
+import com.example.holajicap.db.HolaJicapDatabase;
+import com.example.holajicap.model.User;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class SignInActivity extends AppCompatActivity {
-
+    private TextInputEditText usernameInput, passwordInput;
+    private Button loginButton;
+    private HolaJicapDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,16 +39,47 @@ public class SignInActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish(); // Kết thúc Activity hiện tại nếu cần
+                finish();
             }
         });
         TextView signUpTextView = findViewById(R.id.signUpText);
         signUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Chuyển đến trang SignUpActivity
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
+            }
+        });
+
+//===================Sign in====================
+        usernameInput = findViewById(R.id.usname);
+        passwordInput = findViewById(R.id.password);
+        loginButton = findViewById(R.id.login_button);
+
+        db = Room.databaseBuilder(getApplicationContext(),
+                        HolaJicapDatabase.class, "user_db")
+                .allowMainThreadQueries()
+                .build();
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String username = usernameInput.getText().toString().trim();
+                String password = passwordInput.getText().toString().trim();
+
+                if (username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(SignInActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                } else {
+                    User user = db.userDao().signIn(username, password);
+
+                    if (user != null) {
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(SignInActivity.this, "Tên đăng nhập hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
     }
