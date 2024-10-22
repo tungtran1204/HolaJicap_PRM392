@@ -165,19 +165,19 @@ public class AddTransactionActivity extends AppCompatActivity {
 
         // Kiểm tra dữ liệu và lưu giao dịch
         if (amount.isEmpty()) {
-            Toast.makeText(this, "Please input the amount", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
             return;
         }
         if (transactionType.isEmpty()){
-            Toast.makeText(this, "Please choose a transaction type", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chọn loại giao dịch", Toast.LENGTH_SHORT).show();
             return;
         }
         if (date.isEmpty()){
-            Toast.makeText(this, "Please choose date", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chọn ngày", Toast.LENGTH_SHORT).show();
             return;
         }
         if (transactionMethod.isEmpty()){
-            Toast.makeText(this, "Please choose a transaction method", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chọn phương thức giao dịch", Toast.LENGTH_SHORT).show();
             return;
         }
 
