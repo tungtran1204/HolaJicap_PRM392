@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.holajicap.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,16 +9,24 @@ public class User {
     @PrimaryKey(autoGenerate = true)
     public int uid;
 
-    @ColumnInfo(name = "first_name")
-    public String firstName;
+    @ColumnInfo(name = "username")
+    public String username;
 
-    @ColumnInfo(name = "last_name")
-    public String lastName;
+    @ColumnInfo(name = "password")
+    public String password;
 
-    public User(int uid, String firstName, String lastName) {
-        this.lastName = lastName;
-        this.firstName = firstName;
+    @ColumnInfo(name = "email")
+    public String email;
+
+    @ColumnInfo(name = "currency_id")
+    public int currency_id;
+
+    public User(int uid, String username, String password, String email, int currency_id) {
         this.uid = uid;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.currency_id = currency_id;
     }
 
     public int getUid() {
@@ -29,28 +37,46 @@ public class User {
         this.uid = uid;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getCurrency_id() {
+        return currency_id;
+    }
+
+    public void setCurrency_id(int currency_id) {
+        this.currency_id = currency_id;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "uid=" + uid +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", currency_id=" + currency_id +
                 '}';
     }
 }

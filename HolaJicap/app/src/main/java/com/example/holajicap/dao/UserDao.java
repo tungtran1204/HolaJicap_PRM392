@@ -1,9 +1,11 @@
-package com.example.myapplication;
+package com.example.holajicap.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+
+import com.example.holajicap.model.User;
 
 import java.util.List;
 
