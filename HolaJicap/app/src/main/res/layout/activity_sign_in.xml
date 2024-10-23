@@ -35,7 +35,9 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textColorLink="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -56,7 +58,8 @@
             android:layout_height="wrap_content"
             android:hint="Mật khẩu"
             android:inputType="textPassword"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="@color/white"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
