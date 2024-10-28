@@ -56,10 +56,7 @@ public class SignInActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.password);
         loginButton = findViewById(R.id.login_button);
 
-        db = Room.databaseBuilder(getApplicationContext(),
-                        HolaJicapDatabase.class, "user_db")
-                .allowMainThreadQueries()
-                .build();
+        db = HolaJicapDatabase.getInstance(getApplicationContext());
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

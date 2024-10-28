@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="0"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="12dp"
             android:textColorHint="@android:color/holo_green_light"
             android:inputType="number"
             android:textColor="@android:color/holo_green_light"
@@ -89,8 +89,9 @@
             android:id="@+id/editTextNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="11dp"
             android:hint="Thêm ghi chú"
+            android:textSize="20sp"
             android:textColorHint="@android:color/darker_gray"
             android:textColor="@android:color/white"/>
     </LinearLayout>

@@ -53,10 +53,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 //==============Sign up=================
-        db = Room.databaseBuilder(getApplicationContext(),
-                        HolaJicapDatabase.class, "user_db")
-                .allowMainThreadQueries()
-                .build();
+        db = HolaJicapDatabase.getInstance(getApplicationContext());
         emailInput = findViewById(R.id.usname);
         passwordInput = findViewById(R.id.password);
         findViewById(R.id.login_button).setOnClickListener(new View.OnClickListener() {

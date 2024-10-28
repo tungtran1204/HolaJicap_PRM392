@@ -169,7 +169,8 @@ public class AddTransactionActivity extends AppCompatActivity {
             return;
         }
         if (transactionType.isEmpty()){
-            Toast.makeText(this, "Chọn loại giao dịch", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Chọn loại giao dịch",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
         if (date.isEmpty()){
