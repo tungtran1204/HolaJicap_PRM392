@@ -10,9 +10,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.holajicap.adapter.ViewPagerAdapter;
+import com.example.holajicap.db.HolaJicapDatabase;
 
 import me.relex.circleindicator.CircleIndicator3;
 
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler;
     private Runnable runnable;
     private int currentPage = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
