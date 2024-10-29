@@ -9,7 +9,7 @@ public class Category {
     @PrimaryKey(autoGenerate = true)
     private int cateId;
     @ColumnInfo(name = "cateIcon")
-    private int cateIcon;
+    private String cateIcon;
     @ColumnInfo(name = "cateName")
     private String cateName;
     @ColumnInfo(name = "cateType")
@@ -18,7 +18,7 @@ public class Category {
     public Category() {
     }
 
-    public Category(int cateId, int cateIcon, String cateName, String cateType) {
+    public Category(int cateId, String cateIcon, String cateName, String cateType) {
         this.cateId = cateId;
         this.cateIcon = cateIcon;
         this.cateName = cateName;
@@ -33,11 +33,11 @@ public class Category {
         this.cateId = cateId;
     }
 
-    public int getCateIcon() {
+    public String getCateIcon() {
         return cateIcon;
     }
 
-    public void setCateIcon(int cateIcon) {
+    public void setCateIcon(String cateIcon) {
         this.cateIcon = cateIcon;
     }
 
