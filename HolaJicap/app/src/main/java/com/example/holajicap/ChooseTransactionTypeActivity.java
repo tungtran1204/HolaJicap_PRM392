@@ -66,7 +66,7 @@ public class ChooseTransactionTypeActivity extends AppCompatActivity {
                 finish();
             }
         });
-        title.setText("Chọn nhóm");
+        title.setText("Choose transaction type");
 
 
     }
