@@ -16,6 +16,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.holajicap.db.HolaJicapDatabase;
+import com.example.holajicap.model.Transaction;
+
 import java.util.Calendar;
 
 public class AddTransactionActivity extends AppCompatActivity {
@@ -25,6 +28,8 @@ public class AddTransactionActivity extends AppCompatActivity {
     private TextView tvChooseTransactionMethod;
     private Button saveButton;
     private TextView dateTextView;
+
+    private HolaJicapDatabase db;
     // Add intent chooseTransactionMethod
     private ActivityResultLauncher<Intent> chooseTransactionMethodLauncher;
     private ActivityResultLauncher<Intent> chooseTransactionTypeLauncher;
@@ -156,35 +161,29 @@ public class AddTransactionActivity extends AppCompatActivity {
     }
 
     private void saveTransaction() {
+        db = HolaJicapDatabase.getInstance(getApplicationContext());
         // Get input values
-        String amount = editTextAmount.getText().toString();
-        String transactionType = tvChooseTransactionType.getText().toString();
-        String date = dateTextView.getText().toString();
-        String transactionMethod = tvChooseTransactionMethod.getText().toString();
+        int transId = 0;
+        int walletId = 0;
+        int amount = Integer.parseInt(editTextAmount.getText().toString());
         String notes = editTextNotes.getText().toString();
+        String date = dateTextView.getText().toString();
+        int cateId = 0;
+        String transactionMethod = tvChooseTransactionMethod.getText().toString();
+        String transactionType = tvChooseTransactionType.getText().toString();
 
         // Kiểm tra dữ liệu và lưu giao dịch
-        if (amount.isEmpty()) {
-            Toast.makeText(this, "Nhập số tiền", Toast.LENGTH_SHORT).show();
+        if (amount == 0 || transactionType.isEmpty() || date.isEmpty() || transactionMethod.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập đủ thông tin ", Toast.LENGTH_SHORT).show();
             return;
-        }
-        if (transactionType.isEmpty()){
-            Toast.makeText(this, "Chọn loại giao dịch",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (date.isEmpty()){
-            Toast.makeText(this, "Chọn ngày", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (transactionMethod.isEmpty()){
-            Toast.makeText(this, "Chọn phương thức giao dịch", Toast.LENGTH_SHORT).show();
-            return;
+        } else {
+            // Lưu giao dịch vào CSDL
+            db.transactionDao().insert(new Transaction(transId, walletId, amount, notes, date, cateId));
+            // Lưu dữ liệu (ví dụ như lưu vào CSDL hoặc hiện thông báo thành công)
+            Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
-        // Lưu dữ liệu (ví dụ như lưu vào CSDL hoặc hiện thông báo thành công)
-        Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
-        finish();
     }
 
     public void linkToChooseTransactionTypeActivity(View view) {
