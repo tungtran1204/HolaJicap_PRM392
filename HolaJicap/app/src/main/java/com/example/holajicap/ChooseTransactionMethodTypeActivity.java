@@ -31,7 +31,7 @@ public class ChooseTransactionMethodTypeActivity extends AppCompatActivity {
                 finish();
             }
         });
-        title.setText("Choose wallet");
+        title.setText("Chọn ví");
 
         TransactionMethodType t1 = new TransactionMethodType("Tiền mặt");
         TransactionMethodType t2 = new TransactionMethodType("Chuyển khoản");

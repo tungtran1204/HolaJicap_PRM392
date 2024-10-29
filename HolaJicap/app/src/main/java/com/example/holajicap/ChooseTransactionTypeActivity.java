@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.fragment.ExpenditureFragment;
 import com.example.holajicap.fragment.RevenueFragment;
 import com.google.android.material.tabs.TabLayout;
@@ -17,6 +18,8 @@ import com.google.android.material.tabs.TabLayout;
 public class ChooseTransactionTypeActivity extends AppCompatActivity {
     FrameLayout frameLayout;
     TabLayout tabLayout;
+    private HolaJicapDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +27,7 @@ public class ChooseTransactionTypeActivity extends AppCompatActivity {
         // Initialize fragment
         frameLayout = (FrameLayout) findViewById(R.id.frameLayout);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
+        db = HolaJicapDatabase.getInstance(getApplicationContext());
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new ExpenditureFragment())
                 .addToBackStack(null)
                 .commit();
@@ -66,7 +69,7 @@ public class ChooseTransactionTypeActivity extends AppCompatActivity {
                 finish();
             }
         });
-        title.setText("Choose transaction type");
+        title.setText("Chọn nhóm");
 
 
     }
