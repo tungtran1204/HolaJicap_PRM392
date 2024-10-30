@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         indicator = findViewById(R.id.indicator);
 
         // Dữ liệu hình ảnh và tiêu đề
-        List<String> titles = Arrays.asList("Tiết kiệm", "Quản lý tài chính", "Giảm chi tiêu", "Giảm chi tiêu", "Giảm chi tiêu");
-        List<Integer> images = Arrays.asList(R.drawable.login, R.drawable.login, R.drawable.login, R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground);
+        List<String> titles = Arrays.asList("Quản lý tài chính hiệu quả với HolaJicap", "Cắt giảm những chi phí không cần thiết", "Gia tăng tiết kiệm đều đặn hàng tháng", "Quản lý tất cả ở một nơi", "Hàng triệu người dùng tin tưởng và yêu mến");
+        List<Integer> images = Arrays.asList(R.drawable.img_0386, R.drawable.img_0387, R.drawable.img_0388, R.drawable.img_0389, R.drawable.img_0390);
 
         // Khởi tạo Adapter và set cho ViewPager
         adapter = new ViewPagerAdapter(titles, images);
@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override

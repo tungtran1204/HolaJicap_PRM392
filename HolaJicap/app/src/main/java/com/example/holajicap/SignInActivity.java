@@ -22,6 +22,7 @@ public class SignInActivity extends AppCompatActivity {
     private TextInputEditText usernameInput, passwordInput;
     private Button loginButton;
     private HolaJicapDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,16 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        TextView forgotPassText = findViewById(R.id.forgotPassText);
+        forgotPassText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Chuyển đến ForgotPasswordActivity
+                Intent intent = new Intent(SignInActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
             }
         });
