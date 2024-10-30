@@ -24,7 +24,7 @@ import java.util.List;
 public class RevenueFragment extends Fragment {
     private RecyclerView recyclerView;
     private CategoryAdapter adapter;
-    private List<RevenueType> revenueTypes;
+    private List<Category> categories;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,7 +74,7 @@ public class RevenueFragment extends Fragment {
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView_revenueType);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        List<Category> categories = db.categoryDao().getCategoriesByType("Revenue");
+        categories = db.categoryDao().getCategoriesByType("Revenue");
 //        // Initialize data
 //        revenueTypes = new ArrayList<>();
 //        revenueTypes.add(new RevenueType(R.drawable.salary, "Lương"));
@@ -85,7 +85,7 @@ public class RevenueFragment extends Fragment {
 //        // Add more types...
 //
 //        // Set adapter
-        adapter = new CategoryAdapter(categories);
+        adapter = new CategoryAdapter(categories, requireContext());
         recyclerView.setAdapter(adapter);
 
         return view;

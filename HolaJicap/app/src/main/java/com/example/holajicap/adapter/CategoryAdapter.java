@@ -23,12 +23,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     private Activity activity;
     private Context context;
 
-    public CategoryAdapter() {
-    }
-
-    public CategoryAdapter(List<Category> categories) {
-        this.categories = categories;
-    }
 
     public CategoryAdapter(List<Category> categories, Activity activity) {
         this.categories = categories;
@@ -85,10 +79,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     if (pos != RecyclerView.NO_POSITION) {
                         Category selectedCategory = categories.get(pos);
 
+                        // Tìm resource ID từ tên tệp icon
+                        int resId = context.getResources().getIdentifier(
+                                selectedCategory.getCateIcon(), "drawable", context.getPackageName()
+                        );
+
                         // Tạo Intent để chứa dữ liệu của thẻ được chọn
                         Intent intent = new Intent();
                         intent.putExtra("selectedTitle", selectedCategory.getCateName()); // truyền tên
-                        intent.putExtra("selectedIcon", selectedCategory.getCateIcon());   // truyền icon
+                        intent.putExtra("selectedIcon", resId);   // truyền icon
 
                         // Gửi dữ liệu về Activity gọi nó (AddTransactionActivity)
                         ((ChooseTransactionTypeActivity) itemView.getContext()).setResult(Activity.RESULT_OK, intent);
