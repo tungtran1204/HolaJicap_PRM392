@@ -23,6 +23,7 @@ import java.util.Calendar;
 
 public class AddTransactionActivity extends AppCompatActivity {
     private EditText editTextAmount;
+    private ImageView imv_category_ava;
     private TextView tvChooseTransactionType;
     private EditText editTextNotes;
     private TextView tvChooseTransactionMethod;
@@ -54,14 +55,13 @@ public class AddTransactionActivity extends AppCompatActivity {
         toolbar_title.setText("Thêm giao dịch");
         // Initialize views
         editTextAmount = findViewById(R.id.editTextAmount);
+        imv_category_ava = findViewById(R.id.imv_transaction_type_icon);
         tvChooseTransactionType = findViewById(R.id.tv_chooseTransactionType);
         editTextNotes = findViewById(R.id.editTextNotes);
         tvChooseTransactionMethod = findViewById(R.id.tv_chooseTransactionMethod);
         saveButton = findViewById(R.id.saveButton);
         dateTextView = findViewById(R.id.dateTextView);
-        // Initialize views for chooseTransactionMethod
-        tvChooseTransactionMethod = findViewById(R.id.tv_chooseTransactionMethod);
-        tvChooseTransactionType = findViewById(R.id.tv_chooseTransactionType);
+
         dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,9 +91,17 @@ public class AddTransactionActivity extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        // Lấy dữ liệu từ Intent và cập nhật TextView
-                        String selectedType = result.getData().getStringExtra("selectedType");
-                        tvChooseTransactionMethod.setText(selectedType);
+                        // Nhận icon và tên thẻ đã chọn
+                        int selectedIcon = result.getData().getIntExtra("selectedIcon", -1);
+                        String selectedType = result.getData().getStringExtra("selectedTitle");
+
+                        // Cập nhật ImageView và TextView với dữ liệu nhận được
+                        if (selectedIcon != -1) {
+                            imv_category_ava.setImageResource(selectedIcon);
+                        }
+                        if (selectedType != null) {
+                            tvChooseTransactionType.setText(selectedType);
+                        }
                     }
                 }
         );
@@ -110,7 +118,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Khi mở ChooseTransactionTypeActivity từ AddTransactionActivity
                 Intent intent = new Intent(AddTransactionActivity.this, ChooseTransactionTypeActivity.class);
-                startActivityForResult(intent, 1);  // 1 là requestCode
+                chooseTransactionTypeLauncher.launch(intent);  // 1 là requestCode
 
             }
         });

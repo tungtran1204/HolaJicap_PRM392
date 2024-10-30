@@ -79,9 +79,18 @@ public class ExpenditureFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView_expenditureType);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        List<Category> categories = db.categoryDao().getCategoriesByType("Expenditure");
+        categories = db.categoryDao().getCategoriesByType("Expenditure");
 
-        // Initialize data
+
+
+        // Set adapter
+        adapter = new CategoryAdapter(categories, requireContext());
+        recyclerView.setAdapter(adapter);
+
+        return view;
+    }
+}
+// Initialize data
 //        expenditureTypes = new ArrayList<>();
 //        expenditureTypes.add(new ExpenditureType(R.drawable.food, "Ăn uống"));
 //        expenditureTypes.add(new ExpenditureType(R.drawable.medical_insurance, "Bảo hiểm"));
@@ -115,12 +124,4 @@ public class ExpenditureFragment extends Fragment {
 //        expenditureTypes.add(new ExpenditureType(R.drawable.fitness_workout, "Thể dục thể thao"));
 //        expenditureTypes.add(new ExpenditureType(R.drawable.money_transfer_out, "Tiền chuyển đi"));
 //        expenditureTypes.add(new ExpenditureType(R.drawable.interest_payment, "Trả lãi"));
-        // Add more types...
-
-        // Set adapter
-        adapter = new CategoryAdapter(categories);
-        recyclerView.setAdapter(adapter);
-
-        return view;
-    }
-}
+// Add more types...
