@@ -144,7 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:hint="Chọn phương thức giao dịch"
-            android:onClick="linkToChooseTransactionMethodActivity"
+            android:onClick="linkToChooseWalletActivity"
             android:textColorHint="@android:color/darker_gray"
             android:textColor="@android:color/white"
             android:textSize="20sp"
