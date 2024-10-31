@@ -15,7 +15,7 @@ import com.example.holajicap.model.TransactionMethodType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseTransactionMethodTypeActivity extends AppCompatActivity {
+public class ChooseWalletActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

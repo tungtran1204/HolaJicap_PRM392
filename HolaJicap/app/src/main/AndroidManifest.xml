@@ -20,7 +20,7 @@
             android:name=".AddTransactionActivity"
             android:exported="false" />
         <activity
-            android:name=".ChooseTransactionMethodTypeActivity"
+            android:name=".ChooseWalletActivity"
             android:exported="false" />
         <activity
             android:name=".ChooseTransactionTypeActivity"
