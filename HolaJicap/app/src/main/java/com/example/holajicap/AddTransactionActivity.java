@@ -23,15 +23,16 @@ import java.util.Calendar;
 
 public class AddTransactionActivity extends AppCompatActivity {
     private EditText editTextAmount;
+    private ImageView imv_category_ava;
     private TextView tvChooseTransactionType;
     private EditText editTextNotes;
-    private TextView tvChooseTransactionMethod;
+    private TextView tvChooseWallet;
     private Button saveButton;
     private TextView dateTextView;
 
     private HolaJicapDatabase db;
     // Add intent chooseTransactionMethod
-    private ActivityResultLauncher<Intent> chooseTransactionMethodLauncher;
+    private ActivityResultLauncher<Intent> chooseWalletLauncher;
     private ActivityResultLauncher<Intent> chooseTransactionTypeLauncher;
     private static final int REQUEST_CODE_CHOOSE_METHOD = 1;
 
@@ -54,14 +55,13 @@ public class AddTransactionActivity extends AppCompatActivity {
         toolbar_title.setText("Thêm giao dịch");
         // Initialize views
         editTextAmount = findViewById(R.id.editTextAmount);
+        imv_category_ava = findViewById(R.id.imv_transaction_type_icon);
         tvChooseTransactionType = findViewById(R.id.tv_chooseTransactionType);
         editTextNotes = findViewById(R.id.editTextNotes);
-        tvChooseTransactionMethod = findViewById(R.id.tv_chooseTransactionMethod);
+        tvChooseWallet = findViewById(R.id.tv_wallet_name);
         saveButton = findViewById(R.id.saveButton);
         dateTextView = findViewById(R.id.dateTextView);
-        // Initialize views for chooseTransactionMethod
-        tvChooseTransactionMethod = findViewById(R.id.tv_chooseTransactionMethod);
-        tvChooseTransactionType = findViewById(R.id.tv_chooseTransactionType);
+
         dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,13 +76,13 @@ public class AddTransactionActivity extends AppCompatActivity {
         });
 
         // Khởi tạo launcher cho chooseTransactionMethod
-        chooseTransactionMethodLauncher = registerForActivityResult(
+        chooseWalletLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         // Lấy dữ liệu từ Intent và cập nhật TextView
-                        String selectedMethod = result.getData().getStringExtra("selectedMethod");
-                        tvChooseTransactionMethod.setText(selectedMethod);
+                        String selectedWallet = result.getData().getStringExtra("selectedWallet");
+                        tvChooseWallet.setText(selectedWallet);
                     }
                 }
         );
@@ -91,18 +91,26 @@ public class AddTransactionActivity extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        // Lấy dữ liệu từ Intent và cập nhật TextView
-                        String selectedType = result.getData().getStringExtra("selectedType");
-                        tvChooseTransactionMethod.setText(selectedType);
+                        // Nhận icon và tên thẻ đã chọn
+                        int selectedIcon = result.getData().getIntExtra("selectedIcon", -1);
+                        String selectedType = result.getData().getStringExtra("selectedTitle");
+
+                        // Cập nhật ImageView và TextView với dữ liệu nhận được
+                        if (selectedIcon != -1) {
+                            imv_category_ava.setImageResource(selectedIcon);
+                        }
+                        if (selectedType != null) {
+                            tvChooseTransactionType.setText(selectedType);
+                        }
                     }
                 }
         );
         // Thiết lập sự kiện cho TextView "Choose Transaction Method"
-        tvChooseTransactionMethod.setOnClickListener(new View.OnClickListener() {
+        tvChooseWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AddTransactionActivity.this, ChooseTransactionMethodTypeActivity.class);
-                startActivityForResult(intent, 1); // Sử dụng startActivityForResult thay vì startActivity
+                Intent intent = new Intent(AddTransactionActivity.this, ChooseWalletActivity.class);
+                chooseWalletLauncher.launch(intent); // Sử dụng startActivityForResult thay vì startActivity
             }
         });
         tvChooseTransactionType.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +118,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // Khi mở ChooseTransactionTypeActivity từ AddTransactionActivity
                 Intent intent = new Intent(AddTransactionActivity.this, ChooseTransactionTypeActivity.class);
-                startActivityForResult(intent, 1);  // 1 là requestCode
+                chooseTransactionTypeLauncher.launch(intent);  // 1 là requestCode
 
             }
         });
@@ -122,9 +130,9 @@ public class AddTransactionActivity extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             // Lấy kết quả từ Intent và cập nhật TextView
-            String selectedMethod = data.getStringExtra("selectedMethod");
-            if (selectedMethod != null) {
-                tvChooseTransactionMethod.setText(selectedMethod);
+            String selectedWallet = data.getStringExtra("selectedWallet");
+            if (selectedWallet != null) {
+                tvChooseWallet.setText(selectedWallet);
             }
             // Lấy dữ liệu từ Intent của chooseType trả về
             String selectedTitle = data.getStringExtra("selectedTitle");
@@ -169,11 +177,11 @@ public class AddTransactionActivity extends AppCompatActivity {
         String notes = editTextNotes.getText().toString();
         String date = dateTextView.getText().toString();
         int cateId = 0;
-        String transactionMethod = tvChooseTransactionMethod.getText().toString();
+        String walletType = tvChooseWallet.getText().toString();
         String transactionType = tvChooseTransactionType.getText().toString();
 
         // Kiểm tra dữ liệu và lưu giao dịch
-        if (amount == 0 || transactionType.isEmpty() || date.isEmpty() || transactionMethod.isEmpty()) {
+        if (amount == 0 || transactionType.isEmpty() || date.isEmpty() || walletType.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin ", Toast.LENGTH_SHORT).show();
             return;
         } else {
@@ -194,8 +202,8 @@ public class AddTransactionActivity extends AppCompatActivity {
          startActivity(intent);
     }
 
-    public void linkToChooseTransactionMethodActivity(View view) {
-        Intent intent = new Intent(this, ChooseTransactionMethodTypeActivity.class);
+    public void linkToChooseWalletActivity(View view) {
+        Intent intent = new Intent(this, ChooseWalletActivity.class);
         startActivity(intent);
     }
 }

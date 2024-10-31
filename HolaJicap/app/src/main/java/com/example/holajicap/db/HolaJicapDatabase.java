@@ -24,6 +24,7 @@ public abstract class HolaJicapDatabase extends RoomDatabase {
     private static HolaJicapDatabase instance;
 
     public static HolaJicapDatabase getInstance(Context context){
+
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             HolaJicapDatabase.class, "app_database")

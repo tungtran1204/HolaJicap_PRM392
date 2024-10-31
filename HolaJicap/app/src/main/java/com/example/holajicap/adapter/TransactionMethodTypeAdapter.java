@@ -60,7 +60,7 @@ public class TransactionMethodTypeAdapter extends RecyclerView.Adapter<Transacti
 
                         // Truyền dữ liệu về Activity
                         Intent resultIntent = new Intent();
-                        resultIntent.putExtra("selectedMethod", selectedTransactionMethodType.getTitle());
+                        resultIntent.putExtra("selectedWallet", selectedTransactionMethodType.getTitle());
 
                         // Gọi setResult và finish từ activity
                         activity.setResult(Activity.RESULT_OK, resultIntent);

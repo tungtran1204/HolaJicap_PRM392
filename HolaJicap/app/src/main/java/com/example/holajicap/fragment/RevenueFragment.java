@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.holajicap.R;
-import com.example.holajicap.adapter.RevenueTypeAdapter;
-import com.example.holajicap.model.RevenueType;
+import com.example.holajicap.adapter.CategoryAdapter;
+import com.example.holajicap.db.HolaJicapDatabase;
+import com.example.holajicap.model.Category;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class RevenueFragment extends Fragment {
     private RecyclerView recyclerView;
-    private RevenueTypeAdapter adapter;
-    private List<RevenueType> revenueTypes;
+    private CategoryAdapter adapter;
+    private List<Category> categories;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,8 +33,9 @@ public class RevenueFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private HolaJicapDatabase db;
     public RevenueFragment() {
+        db = HolaJicapDatabase.getInstance(getContext());
         // Required empty public constructor
     }
 
@@ -69,22 +70,22 @@ public class RevenueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_revenue, container, false);
-
+        db = HolaJicapDatabase.getInstance(getContext());
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView_revenueType);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        // Initialize data
-        revenueTypes = new ArrayList<>();
-        revenueTypes.add(new RevenueType(R.drawable.salary, "Lương"));
-        revenueTypes.add(new RevenueType(R.drawable.interest_income, "Thu lãi"));
-
-        revenueTypes.add(new RevenueType(R.drawable.other_income, "Thu nhập khác"));
-        revenueTypes.add(new RevenueType(R.drawable.money_transfer_in, "Tiền chuyển đến"));
-        // Add more types...
-
-        // Set adapter
-        adapter = new RevenueTypeAdapter(revenueTypes);
+        categories = db.categoryDao().getCategoriesByType("Revenue");
+//        // Initialize data
+//        revenueTypes = new ArrayList<>();
+//        revenueTypes.add(new RevenueType(R.drawable.salary, "Lương"));
+//        revenueTypes.add(new RevenueType(R.drawable.interest_income, "Thu lãi"));
+//
+//        revenueTypes.add(new RevenueType(R.drawable.other_income, "Thu nhập khác"));
+//        revenueTypes.add(new RevenueType(R.drawable.money_transfer_in, "Tiền chuyển đến"));
+//        // Add more types...
+//
+//        // Set adapter
+        adapter = new CategoryAdapter(categories, requireContext());
         recyclerView.setAdapter(adapter);
 
         return view;

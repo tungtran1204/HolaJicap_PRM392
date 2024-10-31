@@ -12,46 +12,22 @@ public class Wallet {
     private String walletName;
     @ColumnInfo(name = "balance")
     private int balance;
+    @ColumnInfo(name = "currency")
+    private String currency;
+    @ColumnInfo(name = "description")
+    private String description;
+    @ColumnInfo(name = "createdDate")
+    private String createdDate;
 
     public Wallet() {
     }
 
-    public Wallet(int walletId, String walletName, int balance) {
+    public Wallet(int walletId, String walletName, int balance, String currency, String description, String createdDate) {
         this.walletId = walletId;
         this.walletName = walletName;
         this.balance = balance;
-    }
-
-    public int getWalletId() {
-        return walletId;
-    }
-
-    public void setWalletId(int walletId) {
-        this.walletId = walletId;
-    }
-
-    public String getWalletName() {
-        return walletName;
-    }
-
-    public void setWalletName(String walletName) {
-        this.walletName = walletName;
-    }
-
-    public int getBalance() {
-        return balance;
-    }
-
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
-
-    @Override
-    public String toString() {
-        return "Wallet{" +
-                "walletId=" + walletId +
-                ", walletName='" + walletName + '\'' +
-                ", balance=" + balance +
-                '}';
+        this.currency = currency;
+        this.description = description;
+        this.createdDate = createdDate;
     }
 }
