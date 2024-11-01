@@ -33,14 +33,14 @@ public class Transaction {
     @ColumnInfo(name = "note")
     private String note;
     @ColumnInfo(name = "date")
-    private Date date;
+    private String date;
     @ColumnInfo(name = "cateId")
     private int cateId;
 
     public Transaction() {
     }
 
-    public Transaction(int transId, int walletId, double amount, String note, Date date, int cateId) {
+    public Transaction(int transId, int walletId, double amount, String note, String date, int cateId) {
         this.transId = transId;
         this.walletId = walletId;
         this.amount = amount;
@@ -81,11 +81,11 @@ public class Transaction {
         this.note = note;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
