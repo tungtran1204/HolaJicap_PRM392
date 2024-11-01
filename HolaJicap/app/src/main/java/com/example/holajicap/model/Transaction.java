@@ -29,18 +29,18 @@ public class Transaction {
     @ColumnInfo(name = "walletId")
     private int walletId;
     @ColumnInfo(name = "amount")
-    private int amount;
+    private double amount;
     @ColumnInfo(name = "note")
     private String note;
     @ColumnInfo(name = "date")
-    private String date;
+    private Date date;
     @ColumnInfo(name = "cateId")
     private int cateId;
 
     public Transaction() {
     }
 
-    public Transaction(int transId, int walletId, int amount, String note, String date, int cateId) {
+    public Transaction(int transId, int walletId, double amount, String note, Date date, int cateId) {
         this.transId = transId;
         this.walletId = walletId;
         this.amount = amount;
@@ -65,11 +65,11 @@ public class Transaction {
         this.walletId = walletId;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -81,11 +81,11 @@ public class Transaction {
         this.note = note;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -95,5 +95,17 @@ public class Transaction {
 
     public void setCateId(int cateId) {
         this.cateId = cateId;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transId=" + transId +
+                ", walletId=" + walletId +
+                ", amount=" + amount +
+                ", note='" + note + '\'' +
+                ", date=" + date +
+                ", cateId=" + cateId +
+                '}';
     }
 }

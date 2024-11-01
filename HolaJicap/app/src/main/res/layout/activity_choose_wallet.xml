@@ -10,7 +10,7 @@
     <include layout="@layout/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rec_transactionMethodTypes"
+        android:id="@+id/rec_wallets"
         android:layout_width="406dp"
         android:layout_height="622dp"
         android:layout_marginStart="1dp"

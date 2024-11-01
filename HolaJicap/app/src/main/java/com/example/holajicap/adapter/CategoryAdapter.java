@@ -86,6 +86,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
                         // Tạo Intent để chứa dữ liệu của thẻ được chọn
                         Intent intent = new Intent();
+                        intent.putExtra("selectedCategoryId", selectedCategory.getCateId()); // Truyền `cateId`
                         intent.putExtra("selectedTitle", selectedCategory.getCateName()); // truyền tên
                         intent.putExtra("selectedIcon", resId);   // truyền icon
 

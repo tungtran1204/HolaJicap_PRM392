@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.Transaction;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class AddTransactionActivity extends AppCompatActivity {
     private EditText editTextAmount;
@@ -29,8 +34,12 @@ public class AddTransactionActivity extends AppCompatActivity {
     private TextView tvChooseWallet;
     private Button saveButton;
     private TextView dateTextView;
-
+    private Date selectedDate;
     private HolaJicapDatabase db;
+
+    private int selectedWalletId = -1;
+    private int selectedCategoryId = -1;
+
     // Add intent chooseTransactionMethod
     private ActivityResultLauncher<Intent> chooseWalletLauncher;
     private ActivityResultLauncher<Intent> chooseTransactionTypeLauncher;
@@ -58,9 +67,10 @@ public class AddTransactionActivity extends AppCompatActivity {
         imv_category_ava = findViewById(R.id.imv_transaction_type_icon);
         tvChooseTransactionType = findViewById(R.id.tv_chooseTransactionType);
         editTextNotes = findViewById(R.id.editTextNotes);
-        tvChooseWallet = findViewById(R.id.tv_wallet_name);
+        tvChooseWallet = findViewById(R.id.tv_chooseWallet);
         saveButton = findViewById(R.id.saveButton);
         dateTextView = findViewById(R.id.dateTextView);
+
 
         dateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +81,11 @@ public class AddTransactionActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveTransaction();
+                try {
+                    saveTransaction();
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -81,6 +95,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         // Lấy dữ liệu từ Intent và cập nhật TextView
+                        selectedWalletId = result.getData().getIntExtra("selectedWalletId", -1); // Lưu walletId được chọn
                         String selectedWallet = result.getData().getStringExtra("selectedWallet");
                         tvChooseWallet.setText(selectedWallet);
                     }
@@ -92,6 +107,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         // Nhận icon và tên thẻ đã chọn
+                        selectedCategoryId = result.getData().getIntExtra("selectedCategoryId", -1);
                         int selectedIcon = result.getData().getIntExtra("selectedIcon", -1);
                         String selectedType = result.getData().getStringExtra("selectedTitle");
 
@@ -162,32 +178,55 @@ public class AddTransactionActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     // Cập nhật TextView với ngày đã chọn
-                    dateTextView.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear);
+                    calendar.set(selectedYear, selectedMonth, selectedDay);
+                    Date selectedDate = calendar.getTime();
+
+                    // Định dạng ngày để hiển thị trong TextView
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    dateTextView.setText(sdf.format(selectedDate));
+
+                    // Lưu lại selectedDate để sau này dùng khi lưu Transaction
+                    this.selectedDate = selectedDate;
+//                    dateTextView.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear);
                 }, year, month, day);
 
         datePickerDialog.show();
     }
 
-    private void saveTransaction() {
+    private void saveTransaction() throws ParseException {
         db = HolaJicapDatabase.getInstance(getApplicationContext());
         // Get input values
-        int transId = 0;
-        int walletId = 0;
-        int amount = Integer.parseInt(editTextAmount.getText().toString());
+        // Kiểm tra và lấy giá trị amount
+        String amountText = editTextAmount.getText().toString();
+        if (TextUtils.isEmpty(amountText)) {
+            Toast.makeText(this, "Vui lòng nhập số tiền", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        double amount = Double.parseDouble(amountText);
+
+        // Kiểm tra và lấy giá trị notes
         String notes = editTextNotes.getText().toString();
-        String date = dateTextView.getText().toString();
-        int cateId = 0;
+
+        // Kiểm tra và lấy giá trị selectedDate
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        Date selectedDate;
+        try {
+            selectedDate = dateFormat.parse(dateTextView.getText().toString());
+        } catch (ParseException e) {
+            Toast.makeText(this, "Ngày không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra các giá trị còn lại
         String walletType = tvChooseWallet.getText().toString();
         String transactionType = tvChooseTransactionType.getText().toString();
 
-        // Kiểm tra dữ liệu và lưu giao dịch
-        if (amount == 0 || transactionType.isEmpty() || date.isEmpty() || walletType.isEmpty()) {
+        if (TextUtils.isEmpty(transactionType) || selectedDate == null || TextUtils.isEmpty(walletType)) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin ", Toast.LENGTH_SHORT).show();
             return;
         } else {
             // Lưu giao dịch vào CSDL
-            db.transactionDao().insert(new Transaction(transId, walletId, amount, notes, date, cateId));
-            // Lưu dữ liệu (ví dụ như lưu vào CSDL hoặc hiện thông báo thành công)
+            db.transactionDao().insert(new Transaction(0, selectedWalletId, amount, notes, selectedDate, selectedCategoryId));
             Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
             finish();
         }
