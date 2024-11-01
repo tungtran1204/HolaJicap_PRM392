@@ -35,9 +35,7 @@ public class ViewTransactionActivity extends AppCompatActivity {
         // Khởi tạo danh sách giao dịch
         transactions = new ArrayList<>();
         // Ví dụ thêm giao dịch vào danh sách
-        transactions.add(new Transaction(1, 1, 1000.0, "Salary", new Date(), 1));
-        transactions.add(new Transaction(2, 1, -50.0, "Groceries", new Date(), 2));
-        transactions.add(new Transaction(3, 1, -500.0, "Rent", new Date(), 3));
+
 
         adapter = new TransactionAdapter(this, transactions);
         recyclerView.setAdapter(adapter);

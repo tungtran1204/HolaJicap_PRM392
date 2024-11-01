@@ -39,13 +39,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         holder.amountTextView.setText(String.valueOf(transaction.getAmount())); // Đảm bảo amount là String
         holder.categoryTextView.setText(transaction.getNote());
+        holder.dateTextView.setText(transaction.getNote());
 
-        // Chuyển đổi Date thành String
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()); // Định dạng ngày
-        String formattedDate = sdf.format(transaction.getDate());
-        holder.dateTextView.setText(formattedDate); // Thiết lập chuỗi định dạng vào TextView
 
-        holder.amountTextView.setTextColor(ContextCompat.getColor(context, R.color.blue));
+
     }
 
     @Override
