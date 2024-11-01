@@ -81,8 +81,6 @@ public class ExpenditureFragment extends Fragment {
 
         categories = db.categoryDao().getCategoriesByType("Expenditure");
 
-
-
         // Set adapter
         adapter = new CategoryAdapter(categories, requireContext());
         recyclerView.setAdapter(adapter);

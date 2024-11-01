@@ -9,18 +9,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.holajicap.adapter.TransactionMethodTypeAdapter;
-import com.example.holajicap.model.TransactionMethodType;
+import com.example.holajicap.adapter.WalletAdapter;
+import com.example.holajicap.db.HolaJicapDatabase;
+import com.example.holajicap.model.Wallet;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseWalletActivity extends AppCompatActivity {
-
+    private RecyclerView recyclerView;
+    private WalletAdapter adapter;
+    private List<Wallet> walletList;
+    private HolaJicapDatabase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_transaction_method_type);
+        setContentView(R.layout.activity_choose_wallet);
+        db = HolaJicapDatabase.getInstance(getApplicationContext());
         // Initialize toolbar
         ImageView back_icon = findViewById(R.id.left_icon);
         TextView title = findViewById(R.id.toolbar_title);
@@ -33,18 +37,21 @@ public class ChooseWalletActivity extends AppCompatActivity {
         });
         title.setText("Chọn ví");
 
-        TransactionMethodType t1 = new TransactionMethodType("Tiền mặt");
-        TransactionMethodType t2 = new TransactionMethodType("Chuyển khoản");
-        TransactionMethodType t3 = new TransactionMethodType("Phương thức khác");
+//        TransactionMethodType t1 = new TransactionMethodType("Tiền mặt");
+//        TransactionMethodType t2 = new TransactionMethodType("Chuyển khoản");
+//        TransactionMethodType t3 = new TransactionMethodType("Phương thức khác");
+//
+//        List<TransactionMethodType> transactionMethodTypes = new ArrayList<>();
+//        transactionMethodTypes.add(t1);
+//        transactionMethodTypes.add(t2);
+//        transactionMethodTypes.add(t3);
+        recyclerView = findViewById(R.id.rec_wallets);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<TransactionMethodType> transactionMethodTypes = new ArrayList<>();
-        transactionMethodTypes.add(t1);
-        transactionMethodTypes.add(t2);
-        transactionMethodTypes.add(t3);
+        walletList = db.walletDao().getWalletsByUserId(2);
+        // Set adapter
+        adapter = new WalletAdapter(walletList, this);
+        recyclerView.setAdapter(adapter);
 
-        RecyclerView rec = findViewById(R.id.rec_transactionMethodTypes);
-        TransactionMethodTypeAdapter adapter = new TransactionMethodTypeAdapter(transactionMethodTypes, this);
-        rec.setLayoutManager(new LinearLayoutManager(this));
-        rec.setAdapter(adapter);
     }
 }

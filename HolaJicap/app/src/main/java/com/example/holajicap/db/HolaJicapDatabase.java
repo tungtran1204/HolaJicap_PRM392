@@ -4,6 +4,8 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 import com.example.holajicap.dao.CategoryDao;
 import com.example.holajicap.dao.TransactionDao;
@@ -14,7 +16,8 @@ import com.example.holajicap.model.Transaction;
 import com.example.holajicap.model.User;
 import com.example.holajicap.model.Wallet;
 
-@Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 1)
+@Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 3)
+@TypeConverters({Converter.class})
 public abstract class HolaJicapDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract CategoryDao categoryDao();
@@ -29,6 +32,7 @@ public abstract class HolaJicapDatabase extends RoomDatabase {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             HolaJicapDatabase.class, "app_database")
                     .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
                     .build();
 
             //insert data here
