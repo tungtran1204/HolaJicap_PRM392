@@ -1,8 +1,10 @@
 package com.example.holajicap;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -81,10 +83,16 @@ public class SignInActivity extends AppCompatActivity {
                     User user = db.userDao().signIn(username, password);
 
                     if (user != null) {
-                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("userId", user.getUid()); 
+                        editor.apply();
+                        Intent intent = new Intent(SignInActivity.this, AddTransactionActivity.class);
+                        Log.d("SignInActivity", "Đăng nhập thành công: " + username);
                         startActivity(intent);
                         finish();
                     } else {
+                        Log.d("SignInActivity", "Đăng nhập không thành công cho tên đăng nhập: " + username);
                         Toast.makeText(SignInActivity.this, "Tên đăng nhập hoặc mật khẩu không đúng", Toast.LENGTH_SHORT).show();
                     }
                 }
