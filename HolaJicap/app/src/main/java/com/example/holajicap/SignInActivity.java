@@ -85,6 +85,7 @@ public class SignInActivity extends AppCompatActivity {
                     if (user != null) {
                         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("isLoggedIn", true);
                         editor.putInt("userId", user.getUid()); 
                         editor.apply();
                         Intent intent = new Intent(SignInActivity.this, AddTransactionActivity.class);
