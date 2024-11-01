@@ -30,7 +30,12 @@ public interface TransactionDao {
     void delete(int transId);
 
     @Query("UPDATE 'Transaction' SET amount = :amount, note = :note, date = :date, cateId = :cateId WHERE transId = :transId")
-    void update(int transId, double amount, String note, Date date, int cateId);
+    void update(int transId, double amount, String note, String date, int cateId);
+
+    @Query("SELECT * FROM `Transaction` WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
+    List<Transaction> getTransactionsInRange(String startDate, String endDate);
+
+
 
 
 }
