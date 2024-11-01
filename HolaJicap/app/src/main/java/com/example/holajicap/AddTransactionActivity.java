@@ -3,7 +3,6 @@ package com.example.holajicap;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -51,20 +50,7 @@ public class AddTransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_transaction);
-        Button logOutBtn = findViewById(R.id.logOutBtn);
-        logOutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("userId"); // Xoá userId để đăng xuất
-                editor.apply();
 
-                Intent intent = new Intent(AddTransactionActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
         // Initialize toolbar
         ImageView back_icon = findViewById(R.id.left_icon);
         TextView toolbar_title = findViewById(R.id.toolbar_title);
@@ -259,7 +245,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChooseWalletActivity.class);
         startActivity(intent);
     }
-
 }
 //======================Get UserId=====================
 //SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
