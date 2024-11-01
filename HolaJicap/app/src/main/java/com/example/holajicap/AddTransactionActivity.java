@@ -246,3 +246,6 @@ public class AddTransactionActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+//======================Get UserId=====================
+//SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+//int userId = sharedPreferences.getInt("userId", -1);
