@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:background="@color/black"
+    android:gravity="center_vertical">
+
+    <!-- Message Icon -->
+    <ImageView
+        android:id="@+id/ivMessageIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        android:background="#CEBBBB"
+        android:contentDescription="Message Icon"
+        android:src="@drawable/baseline_message_24" />
+
+    <!-- Notification Content -->
+    <TextView
+        android:id="@+id/tvNotificationContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Notification content"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <!-- Timestamp -->
+    <TextView
+        android:id="@+id/tvNotificationTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10:30 AM"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+</LinearLayout>
