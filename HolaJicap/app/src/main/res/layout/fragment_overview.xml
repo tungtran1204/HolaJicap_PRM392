@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/main"
+    android:background="@color/black">
+
+    <!-- Total Balance Section -->
+    <RelativeLayout
+        android:id="@+id/total_balance_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="16dp"
+        android:layout_marginTop="16dp">
+
+
+        <TextView
+            android:id="@+id/tv_total_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="16dp"
+            android:text="100,000 ₫"
+            android:textColor="@color/white"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/tv_total_balance_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_total_balance"
+            android:layout_marginLeft="10dp"
+            android:text="Tổng số dư"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+
+        <ImageView
+            android:id="@+id/iv_view_toggle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_toEndOf="@+id/tv_total_balance"
+            android:background="@color/white"
+            android:contentDescription="Toggle Visibility"
+            android:src="@drawable/baseline_remove_red_eye_24" />
+
+        <ImageView
+            android:id="@+id/iv_notification"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="24dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/white"
+            android:contentDescription="Notification"
+            android:src="@drawable/baseline_notifications_24" />
+    </RelativeLayout>
+
+    <!-- Wallet Section -->
+
+    <RelativeLayout
+        android:id="@+id/wallet_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_below="@id/total_balance_section"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/tv_wallet_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ví của tôi"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/tv_see_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xem tất cả"
+            android:textColor="@color/green"
+            android:layout_alignParentEnd="true"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_wallet_title"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_account_balance_wallet_24"
+                android:background="@color/white"
+                android:contentDescription="Wallet Icon"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingStart="16dp"
+                android:text="Tiền mặt"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tv_cash_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 ₫"
+                android:textColor="@color/white"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+    <!-- Monthly Report Section -->
+    <RelativeLayout
+        android:id="@+id/monthly_report_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/wallet_section"
+        android:padding="16dp"
+        android:layout_marginTop="16dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_monthly_report_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Báo cáo tháng này"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:id="@+id/tv_view_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Xem báo cáo"
+            android:textColor="@color/green"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_monthly_report_label"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/tv_total_spent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="50dp"
+                android:text="Tổng đã chi"
+                android:textColor="@color/red"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_total_income"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="50dp"
+                android:text="Tổng thu"
+                android:textColor="@color/blue"
+                android:textSize="16sp" />
+
+            <!-- Add a graph or chart here for monthly report visualization -->
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!-- Highest Spending Section -->
+    <RelativeLayout
+        android:id="@+id/highest_spending_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/monthly_report_section"
+        android:layout_marginTop="50dp"
+        android:padding="16dp"
+        >
+
+        <TextView
+            android:id="@+id/tv_highest_spending_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chi tiêu nhiều nhất"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:id="@+id/tv_view_spending_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="Xem chi tiết"
+            android:textColor="@color/green"
+            android:textSize="16sp" />
+
+        <!-- Add spending details or categories below -->
+    </RelativeLayout>
+
+</RelativeLayout>
