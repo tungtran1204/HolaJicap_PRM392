@@ -1,5 +1,6 @@
 package com.example.holajicap;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,8 +21,11 @@ public class ChooseWalletActivity extends AppCompatActivity {
     private WalletAdapter adapter;
     private List<Wallet> walletList;
     private HolaJicapDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("userId", -1);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_wallet);
         db = HolaJicapDatabase.getInstance(getApplicationContext());
@@ -48,7 +52,7 @@ public class ChooseWalletActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.rec_wallets);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        walletList = db.walletDao().getWalletsByUserId(2);
+        walletList = db.walletDao().getWalletsByUserId(userId);
         // Set adapter
         adapter = new WalletAdapter(walletList, this);
         recyclerView.setAdapter(adapter);

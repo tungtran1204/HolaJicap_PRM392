@@ -17,6 +17,8 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent;
         if (isLoggedIn) {
             intent = new Intent(SplashActivity.this, AddTransactionActivity.class);
+//            intent = new Intent(SplashActivity.this, MainActivity.class);
+
         } else {
             intent = new Intent(SplashActivity.this, MainActivity.class);
         }
