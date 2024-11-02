@@ -15,7 +15,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.holajicap.adapter.NotificationAdapter;
 
 import java.util.ArrayList;

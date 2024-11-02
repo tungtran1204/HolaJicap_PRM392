@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
-        android:layout_marginTop="16dp">
+        android:background="@color/dark_gray"
+        >
 
         <!-- Back Button -->
         <ImageView
@@ -40,73 +41,127 @@
 
 
     <!-- Total Wallet Section -->
-
     <RelativeLayout
         android:id="@+id/total_wallet_section"
         android:layout_below="@id/my_wallet_section"
+        android:background="@color/dark_gray"
+        android:layout_marginTop="30dp"
         android:layout_marginBottom="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:layout_marginTop="16dp">
+        android:padding="16dp">
+
 
         <LinearLayout
+            android:id="@+id/iv_total_wallet_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/total_wallet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tổng cộng"
-                android:textSize="18sp"
-                android:textColor="@android:color/white" />
+            <!-- Icon for Total Wallet -->
+            <ImageView
+                android:id="@+id/iv_total_wallet_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_account_balance_wallet_24"
+                android:contentDescription="Total Wallet Icon"
+                app:tint="@android:color/white" />
 
-            <TextView
-                android:id="@+id/total_amount"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="0 ₫"
-                android:textSize="16sp"
-                android:textColor="@android:color/white" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="16dp">
+
+                <TextView
+                    android:id="@+id/total_wallet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tổng cộng"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/total_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 ₫"
+                    android:textSize="16sp"
+                    android:textColor="@color/light_gray" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
-    <!-- Cash Section -->
-
+    <!-- Add to total -->
     <RelativeLayout
-        android:id="@+id/cash_wallet_section"
+        android:id="@+id/add_to_total_section"
         android:layout_below="@id/total_wallet_section"
         android:layout_marginBottom="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:layout_marginTop="16dp">
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/add_to_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tính vào tổng"
+            android:textSize="16sp"
+            android:textColor="@color/light_gray" />
+
+    </RelativeLayout>
+
+
+    <!-- Cash Section -->
+    <RelativeLayout
+        android:id="@+id/cash_wallet_section"
+        android:layout_below="@id/add_to_total_section"
+        android:background="@color/dark_gray"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <LinearLayout
-            android:layout_marginBottom="100dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/cash_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tiền mặt"
-                android:textSize="18sp"
-                android:textColor="@android:color/white" />
+            <!-- Icon for Cash -->
+            <ImageView
+                android:id="@+id/iv_cash_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_account_balance_wallet_24"
+                android:contentDescription="Cash Icon"
+                app:tint="@color/orange" />
 
-            <TextView
-                android:id="@+id/cash_amount"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="0 ₫"
-                android:textSize="16sp"
-                android:textColor="@android:color/white" />
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingStart="16dp">
+
+                <TextView
+                    android:id="@+id/cash_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tiền mặt"
+                    android:textSize="18sp"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/cash_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 ₫"
+                    android:textSize="16sp"
+                    android:textColor="@color/light_gray" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 

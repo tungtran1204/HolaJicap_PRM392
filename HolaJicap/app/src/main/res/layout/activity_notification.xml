@@ -10,8 +10,10 @@
         android:id="@+id/my_wallet_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/dark_gray"
         android:layout_marginTop="16dp"
         android:paddingBottom="16dp">
+
 
         <!-- Back Button -->
         <ImageView
