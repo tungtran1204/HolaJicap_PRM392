@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -169,6 +170,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             // Lấy dữ liệu từ Intent của chooseType trả về
             String selectedTitle = data.getStringExtra("selectedTitle");
             int selectedIcon = data.getIntExtra("selectedIcon", -1);  // -1 là giá trị mặc định nếu không có dữ liệu
+//            selectedCategoryType = data.getStringExtra("selectedCategoryType");  // Nhận `cateType` từ Intent
 
             // Cập nhật TextView và ImageView với dữ liệu mới
             TextView transactionTypeTextView = findViewById(R.id.tv_chooseTransactionType);
@@ -236,40 +238,31 @@ public class AddTransactionActivity extends AppCompatActivity {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin ", Toast.LENGTH_SHORT).show();
             return;
         }
-//        else {
-//            // Lưu giao dịch vào CSDL
-//            db.transactionDao().insert(new Transaction(0, selectedWalletId, amount, notes, selectedDate, selectedCategoryId));
-//            // Điều chỉnh số dư của ví dựa trên loại giao dịch
-//            if ("Expenditure".equals(transactionType)) {
-//                db.walletDao().subtractAmountFromWallet(selectedWalletId, amount);
-//            } else if ("Revenue".equals(transactionType)) {
-//                db.walletDao().addAmountToWallet(selectedWalletId, amount);
-//            }
-//            Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
-//            finish();
-//        }
-        // Kiểm tra cateType từ intent nhận được
-        String cateType = getIntent().getStringExtra("selectedCategoryType");
+        // Thực hiện các thao tác cơ sở dữ liệu trong transaction để đảm bảo tính toàn vẹn
+        db.runInTransaction(() -> {
+            // Điều chỉnh số dư ví
+            if (selectedCategoryType != null) {
+                if (selectedCategoryType.equals("Expenditure")) {
+                    // Trừ số tiền cho ví nếu là chi tiêu
+                    db.walletDao().updateWalletBalance(selectedWalletId, -amount);
+                } else if (selectedCategoryType.equals("Revenue")) {
+                    // Cộng số tiền cho ví nếu là thu nhập
+                    db.walletDao().updateWalletBalance(selectedWalletId, amount);
+                }
 
-        // Điều chỉnh số dư ví
-        if (cateType != null && (cateType.equals("Expenditure") || cateType.equals("Revenue"))) {
-            if (cateType.equals("Expenditure")) {
-                // Trừ số tiền cho ví nếu là chi tiêu
-                db.walletDao().updateWalletAmount(selectedWalletId, -amount);
-            } else if (cateType.equals("Revenue")) {
-                // Cộng số tiền cho ví nếu là thu nhập
-                db.walletDao().updateWalletAmount(selectedWalletId, amount);
+                // Thêm giao dịch vào CSDL
+                Transaction transaction = new Transaction(0, selectedWalletId, amount, notes, selectedDate, selectedCategoryId);
+                db.transactionDao().insert(transaction);
+
+                // Hiển thị thông báo thành công
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            } else {
+                runOnUiThread(() -> Toast.makeText(this, "Loại giao dịch không hợp lệ", Toast.LENGTH_SHORT).show());
             }
-
-            // Thêm giao dịch vào CSDL
-            Transaction transaction = new Transaction(0, selectedWalletId, amount, notes, selectedDate, selectedCategoryId);
-            db.transactionDao().insert(transaction);
-
-            Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
-            finish();
-        } else {
-            Toast.makeText(this, "Loại giao dịch không hợp lệ", Toast.LENGTH_SHORT).show();
-        }
+        });
 
     }
 
