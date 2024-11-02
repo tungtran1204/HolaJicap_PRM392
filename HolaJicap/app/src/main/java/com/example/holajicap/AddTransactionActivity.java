@@ -57,7 +57,8 @@ public class AddTransactionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("userId"); // Xoá userId để đăng xuất
+                editor.remove("userId");
+                editor.clear();
                 editor.apply();
 
                 Intent intent = new Intent(AddTransactionActivity.this, MainActivity.class);
