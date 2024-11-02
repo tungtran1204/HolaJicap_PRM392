@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -74,7 +75,9 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.putBoolean("isLoggedIn", true);
                         editor.putInt("userId", newUser.getUid());
                         editor.apply();
+                        Log.d("SignUpActivity", "Đăng ky thành công: " + newUser.email);
                         Intent intent = new Intent(SignUpActivity.this, AddTransactionActivity.class);
+                        startActivity(intent);
                         Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                         finish();
                     } else {
