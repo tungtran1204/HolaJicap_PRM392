@@ -26,5 +26,5 @@ public interface WalletDao {
     List<Wallet> getWalletsByUserId(int userId);
 
     @Query("UPDATE Wallet SET balance = balance + :amountDelta WHERE walletId = :walletId")
-    void updateWalletAmount(int walletId, double amountDelta);
+    void updateWalletBalance(int walletId, double amountDelta);
 }

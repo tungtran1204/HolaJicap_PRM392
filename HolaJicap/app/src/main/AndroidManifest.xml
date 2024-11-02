@@ -17,9 +17,6 @@
             android:name=".ViewTransactionActivity"
             android:exported="false" />
         <activity
-            android:name=".model.ViewTransactionActivity"
-            android:exported="false" />
-        <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
