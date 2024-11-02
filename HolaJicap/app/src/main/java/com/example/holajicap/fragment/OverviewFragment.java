@@ -1,5 +1,4 @@
 package com.example.holajicap.fragment;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +10,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.holajicap.MonthlyReportActivity;
 import com.example.holajicap.MyWalletActivity;
 import com.example.holajicap.NotificationActivity;
 import com.example.holajicap.R;
+import com.example.holajicap.adapter.SpendingAdapter;
+import com.example.holajicap.model.SpendingItem;
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class OverviewFragment extends Fragment {
@@ -41,7 +49,19 @@ public class OverviewFragment extends Fragment {
         // Set up click listeners for interactions
         ivNotification.setOnClickListener(v -> openNotificationScreen());
         tvSeeAll.setOnClickListener(v -> openMyWalletScreen());
-//        tvViewReport.setOnClickListener(v -> openMonthlyReportScreen());
+        tvViewReport.setOnClickListener(v -> openMonthlyReportScreen());
+
+        //Spending Recycle View
+        RecyclerView rvHighestSpending = view.findViewById(R.id.rv_spending_list);
+        rvHighestSpending.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<SpendingItem> spendingItems = new ArrayList<>();
+        spendingItems.add(new SpendingItem(R.drawable.baseline_message_24, "Food & Beverage", 80));
+        spendingItems.add(new SpendingItem(R.drawable.baseline_message_24, "Rental", 15));
+        spendingItems.add(new SpendingItem(R.drawable.baseline_message_24, "Shopping", 5));
+
+        SpendingAdapter adapter = new SpendingAdapter(spendingItems);
+        rvHighestSpending.setAdapter(adapter);
 
         return view;
     }
@@ -55,9 +75,12 @@ public class OverviewFragment extends Fragment {
         Intent intent = new Intent(getActivity(), MyWalletActivity.class);
         startActivity(intent);
     }
-//
-//    private void openMonthlyReportScreen() {
-//        Intent intent = new Intent(getActivity(), MonthlyReportActivity.class);
-//        startActivity(intent);
-//    }
+    //
+    private void openMonthlyReportScreen() {
+        Intent intent = new Intent(getActivity(), MonthlyReportActivity.class);
+        startActivity(intent);
+    }
+
+
+
 }
