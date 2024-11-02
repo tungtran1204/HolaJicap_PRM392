@@ -16,4 +16,10 @@
     <style name="btn_style">
         <item name="android:backgroundTint">@color/green</item>
     </style>
+
+<!--    <style name="CustomMenuItemStyle" parent="Widget.AppCompat.PopupMenu">-->
+<!--        <item name="android:background">@color/light_black</item>-->
+<!--        <item name="android:textColor">@android:color/white</item>-->
+<!--    </style>-->
+
 </resources>

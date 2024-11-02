@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,11 +36,12 @@ public class AddTransactionActivity extends AppCompatActivity {
     private TextView tvChooseWallet;
     private Button saveButton;
     private TextView dateTextView;
-    private Date selectedDate;
+    private String selectedDate;
     private HolaJicapDatabase db;
 
     private int selectedWalletId = -1;
     private int selectedCategoryId = -1;
+    private String selectedCategoryType = "";
 
     // Add intent chooseTransactionMethod
     private ActivityResultLauncher<Intent> chooseWalletLauncher;
@@ -123,6 +125,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         // Nhận icon và tên thẻ đã chọn
                         selectedCategoryId = result.getData().getIntExtra("selectedCategoryId", -1);
+                        selectedCategoryType = result.getData().getStringExtra("selectedCategoryType");
                         int selectedIcon = result.getData().getIntExtra("selectedIcon", -1);
                         String selectedType = result.getData().getStringExtra("selectedTitle");
 
@@ -168,6 +171,7 @@ public class AddTransactionActivity extends AppCompatActivity {
             // Lấy dữ liệu từ Intent của chooseType trả về
             String selectedTitle = data.getStringExtra("selectedTitle");
             int selectedIcon = data.getIntExtra("selectedIcon", -1);  // -1 là giá trị mặc định nếu không có dữ liệu
+//            selectedCategoryType = data.getStringExtra("selectedCategoryType");  // Nhận `cateType` từ Intent
 
             // Cập nhật TextView và ImageView với dữ liệu mới
             TextView transactionTypeTextView = findViewById(R.id.tv_chooseTransactionType);
@@ -196,12 +200,16 @@ public class AddTransactionActivity extends AppCompatActivity {
                     calendar.set(selectedYear, selectedMonth, selectedDay);
                     Date selectedDate = calendar.getTime();
 
-                    // Định dạng ngày để hiển thị trong TextView
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-                    dateTextView.setText(sdf.format(selectedDate));
+                    // Định dạng ngày theo "yyyy/MM/dd" để lưu
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+                    String formattedDate = sdf.format(selectedDate);
+
+                    // Cập nhật TextView hiển thị dạng "dd/MM/yyyy"
+                    SimpleDateFormat displayFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                    dateTextView.setText(displayFormat.format(selectedDate));
 
                     // Lưu lại selectedDate để sau này dùng khi lưu Transaction
-                    this.selectedDate = selectedDate;
+                    this.selectedDate = formattedDate;
 //                    dateTextView.setText(selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear);
                 }, year, month, day);
 
@@ -222,29 +230,40 @@ public class AddTransactionActivity extends AppCompatActivity {
         // Kiểm tra và lấy giá trị notes
         String notes = editTextNotes.getText().toString();
 
-        // Kiểm tra và lấy giá trị selectedDate
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        Date selectedDate;
-        try {
-            selectedDate = dateFormat.parse(dateTextView.getText().toString());
-        } catch (ParseException e) {
-            Toast.makeText(this, "Ngày không hợp lệ", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         // Kiểm tra các giá trị còn lại
         String walletType = tvChooseWallet.getText().toString();
         String transactionType = tvChooseTransactionType.getText().toString();
 
+
         if (TextUtils.isEmpty(transactionType) || selectedDate == null || TextUtils.isEmpty(walletType)) {
             Toast.makeText(this, "Vui lòng nhập đủ thông tin ", Toast.LENGTH_SHORT).show();
             return;
-        } else {
-            // Lưu giao dịch vào CSDL
-            db.transactionDao().insert(new Transaction(0, selectedWalletId, amount, notes, selectedDate, selectedCategoryId));
-            Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
-            finish();
         }
+        // Thực hiện các thao tác cơ sở dữ liệu trong transaction để đảm bảo tính toàn vẹn
+        db.runInTransaction(() -> {
+            // Điều chỉnh số dư ví
+            if (selectedCategoryType != null) {
+                if (selectedCategoryType.equals("Expenditure")) {
+                    // Trừ số tiền cho ví nếu là chi tiêu
+                    db.walletDao().updateWalletBalance(selectedWalletId, -amount);
+                } else if (selectedCategoryType.equals("Revenue")) {
+                    // Cộng số tiền cho ví nếu là thu nhập
+                    db.walletDao().updateWalletBalance(selectedWalletId, amount);
+                }
+
+                // Thêm giao dịch vào CSDL
+                Transaction transaction = new Transaction(0, selectedWalletId, amount, notes, selectedDate, selectedCategoryId);
+                db.transactionDao().insert(transaction);
+
+                // Hiển thị thông báo thành công
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            } else {
+                runOnUiThread(() -> Toast.makeText(this, "Loại giao dịch không hợp lệ", Toast.LENGTH_SHORT).show());
+            }
+        });
 
     }
 
