@@ -88,7 +88,7 @@ public class SignInActivity extends AppCompatActivity {
                         editor.putBoolean("isLoggedIn", true);
                         editor.putInt("userId", user.getUid()); 
                         editor.apply();
-                        Intent intent = new Intent(SignInActivity.this, AddTransactionActivity.class);
+                        Intent intent = new Intent(SignInActivity.this, NavigationActivity.class);
                         Log.d("SignInActivity", "Đăng nhập thành công: " + username);
                         startActivity(intent);
                         finish();

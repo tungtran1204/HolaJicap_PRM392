@@ -63,7 +63,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 editor.clear();
                 editor.apply();
 
-                Intent intent = new Intent(AddTransactionActivity.this, NavigationActivity.class);
+                Intent intent = new Intent(AddTransactionActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }

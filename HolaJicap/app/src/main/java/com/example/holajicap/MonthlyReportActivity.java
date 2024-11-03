@@ -1,16 +1,21 @@
 
 package com.example.holajicap;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.holajicap.dao.TransactionDao;
+import com.example.holajicap.dao.WalletDao;
 import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.Transaction;
+import com.example.holajicap.model.Wallet;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -29,16 +34,18 @@ import java.util.List;
 import java.util.Locale;
 
 public class MonthlyReportActivity extends AppCompatActivity {
-
+    private HolaJicapDatabase db;
     private BarChart barChart;
     private TransactionDao transactionDao;
+    private TextView totalAmountTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monthly_report);
-
+        db = HolaJicapDatabase.getInstance(getApplicationContext());
         barChart = findViewById(R.id.barChart);
+        totalAmountTextView = findViewById(R.id.total_amount);
         transactionDao = HolaJicapDatabase.getInstance(getApplicationContext()).transactionDao();
         logAllTransactions();
 
@@ -54,19 +61,33 @@ public class MonthlyReportActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).select();
     }
 
+    private int calculateTotalBalance() {
+        int totalBalance = 0;
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("userId", -1);
+        List<Wallet> wallets = db.walletDao().getWalletsByUserId(userId); // Lấy danh sách các ví
+        for (Wallet wallet : wallets) {
+            totalBalance += wallet.getBalance(); // Cộng dồn số dư của mỗi ví
+        }
+        return totalBalance; // Trả về tổng số dư
+    }
+
     private void updateBarChart() {
         // Thiết lập khoảng ngày cho tháng hiện tại
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
-        String startDate= "2024/01/01";
+        String startDate = "2024/01/01";
 //        String startDate = formatDate(calendar.getTime());
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        String endDate= "2024/01/31";
+        String endDate = "2024/01/31";
 //        String endDate = formatDate(calendar.getTime());
 
         // Lấy danh sách giao dịch trong tháng
         List<Transaction> transactions = transactionDao.getTransactionsInRange(startDate, endDate);
         Log.d("MonthlyReportActivity", "Số lượng giao dịch lấy được: " + transactions.size());
+
+        int totalBalance = calculateTotalBalance();
+        totalAmountTextView.setText(String.format(Locale.getDefault(), "%,d", totalBalance));
 
         // Tạo mảng lưu trữ tổng số tiền từng phần của tháng
         float[] amounts = new float[5];
@@ -106,7 +127,7 @@ public class MonthlyReportActivity extends AppCompatActivity {
         }
 
         // Thiết lập DataSet dạng stacked bar
-        BarDataSet dataSet = new BarDataSet(entries, "Giao dịch");
+        BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(getResources().getColor(R.color.blue), getResources().getColor(R.color.red));
         dataSet.setStackLabels(new String[]{"Thu nhập", "Chi tiêu"});
         dataSet.setDrawValues(false); // Ẩn số trên đỉnh cột
@@ -218,7 +239,7 @@ public class MonthlyReportActivity extends AppCompatActivity {
         }
 
         // Thiết lập DataSet dạng stacked bar
-        BarDataSet dataSet = new BarDataSet(entries, "Giao dịch");
+        BarDataSet dataSet = new BarDataSet(entries, "");
         dataSet.setColors(getResources().getColor(R.color.blue), getResources().getColor(R.color.red));
         dataSet.setStackLabels(new String[]{"Thu nhập", "Chi tiêu"});
         dataSet.setDrawValues(false); // Ẩn số trên đỉnh cột
