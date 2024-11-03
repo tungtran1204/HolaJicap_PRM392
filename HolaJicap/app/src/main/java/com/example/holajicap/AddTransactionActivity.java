@@ -217,6 +217,8 @@ public class AddTransactionActivity extends AppCompatActivity {
     }
 
     private void saveTransaction() throws ParseException {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = sharedPreferences.getInt("userId", -1);
         db = HolaJicapDatabase.getInstance(getApplicationContext());
         // Get input values
         // Kiểm tra và lấy giá trị amount
@@ -252,7 +254,7 @@ public class AddTransactionActivity extends AppCompatActivity {
                 }
 
                 // Thêm giao dịch vào CSDL
-                Transaction transaction = new Transaction(0, selectedWalletId, amount, notes, selectedDate, selectedCategoryId);
+                Transaction transaction = new Transaction(0, userId, selectedWalletId, amount, notes, selectedDate, selectedCategoryId);
                 db.transactionDao().insert(transaction);
 
                 // Hiển thị thông báo thành công

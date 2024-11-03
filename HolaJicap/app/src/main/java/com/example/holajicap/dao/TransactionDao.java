@@ -23,6 +23,9 @@ public interface TransactionDao {
     @Query("SELECT * FROM 'Transaction' WHERE transId = :transId")
     Transaction getTransactionById(int transId);
 
+    @Query("SELECT * FROM 'Transaction' WHERE userId = :userId")
+    List<Transaction> getTransactionsByUserId(int userId);
+
     @Insert
     void insert(Transaction transaction);
 
