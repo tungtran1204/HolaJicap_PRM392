@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 @Entity(tableName = "Transaction",
         foreignKeys = {
                 @ForeignKey(
@@ -20,12 +18,20 @@ import java.util.Date;
                         parentColumns = "walletId",
                         childColumns = "walletId",
                         onDelete = ForeignKey.CASCADE
+                ),
+                @ForeignKey(
+                        entity = User.class,
+                        parentColumns = "uid",
+                        childColumns = "userId",
+                        onDelete = ForeignKey.CASCADE
                 )
         }
 )
 public class Transaction {
     @PrimaryKey(autoGenerate = true)
     private int transId;
+    @ColumnInfo(name = "userId")
+    private int userId;
     @ColumnInfo(name = "walletId")
     private int walletId;
     @ColumnInfo(name = "amount")
@@ -40,8 +46,9 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(int transId, int walletId, double amount, String note, String date, int cateId) {
+    public Transaction(int transId, int userId, int walletId, double amount, String note, String date, int cateId) {
         this.transId = transId;
+        this.userId = userId;
         this.walletId = walletId;
         this.amount = amount;
         this.note = note;
@@ -55,6 +62,14 @@ public class Transaction {
 
     public void setTransId(int transId) {
         this.transId = transId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getWalletId() {
@@ -101,10 +116,11 @@ public class Transaction {
     public String toString() {
         return "Transaction{" +
                 "transId=" + transId +
+                ", userId=" + userId +
                 ", walletId=" + walletId +
                 ", amount=" + amount +
                 ", note='" + note + '\'' +
-                ", date=" + date +
+                ", date='" + date + '\'' +
                 ", cateId=" + cateId +
                 '}';
     }
