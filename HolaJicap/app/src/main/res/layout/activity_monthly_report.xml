@@ -116,12 +116,11 @@
                         android:text="Thu nhập ròng"
                         android:textSize="18sp"
                         android:textColor="@android:color/white" />
-
-                    <!--                    <com.github.mikephil.charting.charts.BarChart-->
-                    <!--                        android:id="@+id/bar_chart"-->
-                    <!--                        android:layout_width="match_parent"-->
-                    <!--                        android:layout_height="200dp"-->
-                    <!--                        android:layout_marginTop="8dp" />-->
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        tools:ignore="MissingClass" />
                 </LinearLayout>
             </RelativeLayout>
 
