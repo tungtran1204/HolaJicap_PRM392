@@ -38,9 +38,12 @@ public class MonthlyReportActivity extends AppCompatActivity {
     private BarChart barChart;
     private TransactionDao transactionDao;
     private TextView totalAmountTextView;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId", -1);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monthly_report);
         db = HolaJicapDatabase.getInstance(getApplicationContext());
@@ -48,7 +51,7 @@ public class MonthlyReportActivity extends AppCompatActivity {
         totalAmountTextView = findViewById(R.id.total_amount);
         transactionDao = HolaJicapDatabase.getInstance(getApplicationContext()).transactionDao();
         logAllTransactions();
-
+        Log.d("MonthlyReportActivity", "User ID: " + userId);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         setupTabLayout(tabLayout);
         ImageView ivBack = findViewById(R.id.iv_back);
@@ -63,8 +66,7 @@ public class MonthlyReportActivity extends AppCompatActivity {
 
     private int calculateTotalBalance() {
         int totalBalance = 0;
-        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        int userId = sharedPreferences.getInt("userId", -1);
+        Log.d("MonthlyReportActivity", "User ID: " + userId);
         List<Wallet> wallets = db.walletDao().getWalletsByUserId(userId); // Lấy danh sách các ví
         for (Wallet wallet : wallets) {
             totalBalance += wallet.getBalance(); // Cộng dồn số dư của mỗi ví
@@ -73,17 +75,14 @@ public class MonthlyReportActivity extends AppCompatActivity {
     }
 
     private void updateBarChart() {
-        // Thiết lập khoảng ngày cho tháng hiện tại
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
-        String startDate = "2024/01/01";
-//        String startDate = formatDate(calendar.getTime());
+        String startDate = formatDate(calendar.getTime());
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        String endDate = "2024/01/31";
-//        String endDate = formatDate(calendar.getTime());
+        String endDate = formatDate(calendar.getTime());
 
         // Lấy danh sách giao dịch trong tháng
-        List<Transaction> transactions = transactionDao.getTransactionsInRange(startDate, endDate);
+        List<Transaction> transactions = transactionDao.getTransactionsInRangeByUserId(userId, startDate, endDate);
         Log.d("MonthlyReportActivity", "Số lượng giao dịch lấy được: " + transactions.size());
 
         int totalBalance = calculateTotalBalance();
@@ -190,14 +189,14 @@ public class MonthlyReportActivity extends AppCompatActivity {
     private void updateBarChartForPreviousMonth() {
         // Cập nhật khoảng thời gian cho tháng trước
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -1); // Giảm một tháng
+        calendar.add(Calendar.MONTH, -1);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         String startDate = formatDate(calendar.getTime());
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         String endDate = formatDate(calendar.getTime());
 
         // Lấy danh sách giao dịch trong tháng trước
-        List<Transaction> transactions = transactionDao.getTransactionsInRange(startDate, endDate);
+        List<Transaction> transactions = transactionDao.getTransactionsInRangeByUserId(userId, startDate, endDate);
         Log.d("MonthlyReportActivity", "Số lượng giao dịch tháng trước: " + transactions.size());
 
         // Tạo mảng lưu trữ tổng số tiền từng phần của tháng

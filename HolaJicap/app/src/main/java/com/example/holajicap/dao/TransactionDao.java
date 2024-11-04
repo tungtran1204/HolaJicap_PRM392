@@ -39,6 +39,8 @@ public interface TransactionDao {
     List<Transaction> getTransactionsInRange(String startDate, String endDate);
 
 
+    @Query("SELECT * FROM `Transaction` WHERE userId = :userId AND date BETWEEN :startDate AND :endDate ORDER BY date ASC")
+    List<Transaction> getTransactionsInRangeByUserId(int userId, String startDate, String endDate);
 
 
 }

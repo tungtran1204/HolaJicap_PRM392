@@ -16,7 +16,7 @@ import com.example.holajicap.model.Transaction;
 import com.example.holajicap.model.User;
 import com.example.holajicap.model.Wallet;
 
-@Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 4)
+@Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 5)
 @TypeConverters({Converter.class})
 public abstract class HolaJicapDatabase extends RoomDatabase {
     public abstract UserDao userDao();
