@@ -42,9 +42,9 @@ public class NavigationActivity extends AppCompatActivity {
                 if (position == 0) {
                     bottomNavigationView.setSelectedItemId(R.id.mHome);
                 }
-                else if (position == 1) {
-                    bottomNavigationView.setSelectedItemId(R.id.mWallet);
-                }
+//                else if (position == 1) {
+//                    bottomNavigationView.setSelectedItemId(R.id.mWallet);
+//                }
 //                else if (position == 2) {
 //                    bottomNavigationView.setSelectedItemId(R.id.mAdd);
 //                }   - Cho nay dung Activity -> Ko dung Fragment
@@ -65,7 +65,8 @@ public class NavigationActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(0);
                 return true;
             } else if (itemId == R.id.mWallet) {
-                viewPager.setCurrentItem(1);
+                Intent intent = new Intent(NavigationActivity.this, ViewTransactionActivity.class);
+                startActivity(intent);
                 return true;
             } else if (itemId == R.id.mAdd) {
                 Intent intent = new Intent(NavigationActivity.this, AddTransactionActivity.class);
