@@ -6,7 +6,7 @@
     android:background="@color/dark_gray">
 
     <ImageView
-        android:id="@+id/iv_spending_icon"
+        android:id="@+id/iconView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@color/light_gray"
@@ -14,7 +14,7 @@
         android:contentDescription="Spending Icon" />
 
     <TextView
-        android:id="@+id/tv_spending_name"
+        android:id="@+id/nameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -25,7 +25,7 @@
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/tv_spending_percentage"
+        android:id="@+id/amountTextView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

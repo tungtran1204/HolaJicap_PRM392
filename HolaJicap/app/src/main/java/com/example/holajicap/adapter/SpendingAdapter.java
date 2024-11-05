@@ -1,5 +1,6 @@
 package com.example.holajicap.adapter;
-
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +11,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.holajicap.R;
-import com.example.holajicap.model.SpendingItem;
+import com.example.holajicap.SpendingData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.SpendingViewHolder> {
 
-    private final List<SpendingItem> spendingItems;
+    private List<SpendingData> spendingDataList = new ArrayList<>();
+    private Context context;
 
-    public SpendingAdapter(List<SpendingItem> spendingItems) {
-        this.spendingItems = spendingItems;
+    public SpendingAdapter(Context context) {
+        this.context = context;
+    }
+
+    public void setData(List<SpendingData> newData) {
+        spendingDataList.clear();
+        if (newData != null) {
+            spendingDataList.addAll(newData);
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -31,26 +42,38 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
 
     @Override
     public void onBindViewHolder(@NonNull SpendingViewHolder holder, int position) {
-        SpendingItem item = spendingItems.get(position);
-        holder.icon.setImageResource(item.getIconResId());
-        holder.name.setText(item.getName());
-        holder.percentage.setText(item.getPercentage() + "%");
+        SpendingData data = spendingDataList.get(position);
+        Log.d("SpendingAdapter", "Category: " + data.getCateName()
+                + ", Percentage: " + data.getPercentage());
+
+        holder.nameTextView.setText(data.getCateName());
+        holder.amountTextView.setText(String.format("%.2f%%", data.getPercentage()));
+
+        int iconResId = context.getResources().getIdentifier(data.getCateIcon(), "drawable", context.getPackageName());
+        if (iconResId != 0) {
+            holder.iconView.setImageResource(iconResId);
+        } else {
+            holder.iconView.setImageResource(R.drawable.baseline_account_balance_wallet_24);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return spendingItems.size();
+        return spendingDataList.size();
     }
 
-    static class SpendingViewHolder extends RecyclerView.ViewHolder {
-        ImageView icon;
-        TextView name, percentage;
+    public static class SpendingViewHolder extends RecyclerView.ViewHolder {
+        ImageView iconView;
+        TextView nameTextView, amountTextView;
 
-        SpendingViewHolder(View itemView) {
+        public SpendingViewHolder(@NonNull View itemView) {
             super(itemView);
-            icon = itemView.findViewById(R.id.iv_spending_icon);
-            name = itemView.findViewById(R.id.tv_spending_name);
-            percentage = itemView.findViewById(R.id.tv_spending_percentage);
+            iconView = itemView.findViewById(R.id.iconView);
+            nameTextView = itemView.findViewById(R.id.nameTextView);
+            amountTextView = itemView.findViewById(R.id.amountTextView1);
         }
     }
 }
+
+
+

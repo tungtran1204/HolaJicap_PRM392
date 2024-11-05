@@ -342,7 +342,7 @@
 
                 <!-- RecyclerView cho danh sách -->
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_spending_list"
+                    android:id="@+id/spendingRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/dark_gray"

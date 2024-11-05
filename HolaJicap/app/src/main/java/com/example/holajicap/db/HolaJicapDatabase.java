@@ -16,6 +16,9 @@ import com.example.holajicap.model.Transaction;
 import com.example.holajicap.model.User;
 import com.example.holajicap.model.Wallet;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 @Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 5)
 @TypeConverters({Converter.class})
 public abstract class HolaJicapDatabase extends RoomDatabase {
@@ -27,6 +30,7 @@ public abstract class HolaJicapDatabase extends RoomDatabase {
     private static HolaJicapDatabase instance;
 
     public static HolaJicapDatabase getInstance(Context context){
+
 
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),

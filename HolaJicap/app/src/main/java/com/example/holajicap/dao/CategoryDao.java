@@ -23,4 +23,5 @@ public interface CategoryDao {
 
     @Query("SELECT * FROM Category WHERE cateType = :cateType AND cateName = :cateName")
     Category getCategoryByTypeAndName(String cateType, String cateName);
+
 }

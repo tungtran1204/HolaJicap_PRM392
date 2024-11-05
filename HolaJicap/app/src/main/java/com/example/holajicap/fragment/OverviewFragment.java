@@ -1,6 +1,9 @@
 package com.example.holajicap.fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +20,11 @@ import com.example.holajicap.MonthlyReportActivity;
 import com.example.holajicap.MyWalletActivity;
 import com.example.holajicap.NotificationActivity;
 import com.example.holajicap.R;
+import com.example.holajicap.SpendingData;
 import com.example.holajicap.adapter.SpendingAdapter;
-import com.example.holajicap.model.SpendingItem;
-import com.google.android.material.tabs.TabLayout;
+import com.example.holajicap.dao.TransactionDao;
+import com.example.holajicap.db.HolaJicapDatabase;
+import com.example.holajicap.model.Wallet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,10 @@ public class OverviewFragment extends Fragment {
     private ImageView ivNotification;
     private TextView tvSeeAll;
     private TextView tvViewReport;
+    private RecyclerView spendingRecyclerView;
+    private SpendingAdapter spendingAdapter;
+    private HolaJicapDatabase db;
+    private int userId;
 
     public OverviewFragment(){
 
@@ -38,6 +47,8 @@ public class OverviewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
@@ -51,20 +62,45 @@ public class OverviewFragment extends Fragment {
         tvSeeAll.setOnClickListener(v -> openMyWalletScreen());
         tvViewReport.setOnClickListener(v -> openMonthlyReportScreen());
 
-        //Spending Recycle View
-        RecyclerView rvHighestSpending = view.findViewById(R.id.rv_spending_list);
-        rvHighestSpending.setLayoutManager(new LinearLayoutManager(getContext()));
+        // Initialize the adapter and RecyclerView
+        spendingRecyclerView = view.findViewById(R.id.spendingRecyclerView);
+        spendingAdapter = new SpendingAdapter(requireContext());
+        spendingRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        spendingRecyclerView.setAdapter(spendingAdapter);
+        db = HolaJicapDatabase.getInstance(requireContext());
 
-        List<SpendingItem> spendingItems = new ArrayList<>();
-        spendingItems.add(new SpendingItem(R.drawable.baseline_message_24, "Food & Beverage", 80));
-        spendingItems.add(new SpendingItem(R.drawable.baseline_message_24, "Rental", 15));
-        spendingItems.add(new SpendingItem(R.drawable.baseline_message_24, "Shopping", 5));
+        // Initialize database instance
+        db = HolaJicapDatabase.getInstance(requireContext());
 
-        SpendingAdapter adapter = new SpendingAdapter(spendingItems);
-        rvHighestSpending.setAdapter(adapter);
+        // Load data into the adapter
+        loadTopCategories();
 
         return view;
     }
+
+
+
+    private void loadTopCategories() {
+        int userId = getCurrentUserId();
+
+        new Thread(() -> {
+            TransactionDao transactionDao = db.transactionDao();
+            List<SpendingData> topCategories = transactionDao.getTopCategoriesWithPercentage(userId);
+
+            for (SpendingData data : topCategories) {
+                Log.d("OverviewFragment", "Category: " + data.getCateName() + ", Total Amount: "
+                        + data.getTotalAmount() + ", Percentage: " + data.getPercentage());
+            }
+
+            requireActivity().runOnUiThread(() -> spendingAdapter.setData(topCategories));
+        }).start();
+    }
+
+    private int getCurrentUserId() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("UserPreferences", Context.MODE_PRIVATE);
+        return sharedPreferences.getInt("UserId", -1); // Default to -1 if no user is found
+    }
+
 
     private void openNotificationScreen() {
         Intent intent = new Intent(getActivity(), NotificationActivity.class);
@@ -75,7 +111,7 @@ public class OverviewFragment extends Fragment {
         Intent intent = new Intent(getActivity(), MyWalletActivity.class);
         startActivity(intent);
     }
-    //
+
     private void openMonthlyReportScreen() {
         Intent intent = new Intent(getActivity(), MonthlyReportActivity.class);
         startActivity(intent);

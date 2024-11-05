@@ -4,6 +4,8 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.example.holajicap.SpendingData;
+import com.example.holajicap.model.Category;
 import com.example.holajicap.model.Transaction;
 
 import java.util.Date;
@@ -42,5 +44,14 @@ public interface TransactionDao {
     @Query("SELECT * FROM `Transaction` WHERE userId = :userId AND date BETWEEN :startDate AND :endDate ORDER BY date ASC")
     List<Transaction> getTransactionsInRangeByUserId(int userId, String startDate, String endDate);
 
+    @Query("SELECT c.cateIcon, c.cateName, SUM(t.amount) AS totalAmount, "
+            + "ROUND((SUM(t.amount) * 100.0 / (SELECT SUM(amount) FROM `Transaction` WHERE userId = :userId)), 2) AS percentage "
+            + "FROM `Transaction` t "
+            + "JOIN Category c ON t.cateId = c.cateId "
+            + "WHERE t.userId = :userId "
+            + "GROUP BY c.cateId "
+            + "ORDER BY totalAmount DESC "
+            + "LIMIT 3")
+    List<SpendingData> getTopCategoriesWithPercentage(int userId);
 
 }
