@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:orientation="vertical"
+    tools:context=".fragment.AccountFragment">
+
+    <include layout="@layout/account_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/account_info"
+        android:layout_width="407dp"
+        android:layout_height="283dp"
+        android:layout_below="@id/tv_account_email"
+        android:layout_marginTop="62dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <!-- ImageView hiển thị hình ảnh tài khoản -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:src="@drawable/baseline_account_holder_24" />
+
+            <!-- TextView để hiển thị nội dung trên ImageView -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="TÀI KHOẢN\nMIỄN PHÍ"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:gravity="center" />
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/tv_account_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="TextView"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/logOutBtn"
+        android:layout_width="324dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#1C1C1E"
+        android:text="Đăng xuất"
+        android:textColor="#D6150F"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/account_info" />
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

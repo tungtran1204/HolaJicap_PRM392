@@ -7,6 +7,7 @@ import androidx.room.Query;
 import com.example.holajicap.SpendingData;
 import com.example.holajicap.model.Category;
 import com.example.holajicap.model.Transaction;
+import com.example.holajicap.model.TransactionWithCategory;
 
 import java.util.Date;
 import java.util.List;
@@ -40,10 +41,12 @@ public interface TransactionDao {
     @Query("SELECT * FROM `Transaction` WHERE date BETWEEN :startDate AND :endDate ORDER BY date ASC")
     List<Transaction> getTransactionsInRange(String startDate, String endDate);
 
-
     @Query("SELECT * FROM `Transaction` WHERE userId = :userId AND date BETWEEN :startDate AND :endDate ORDER BY date ASC")
     List<Transaction> getTransactionsInRangeByUserId(int userId, String startDate, String endDate);
 
+    @androidx.room.Transaction
+    @Query("SELECT * FROM `Transaction` WHERE userId = :userId AND date BETWEEN :startDate AND :endDate")
+    List<TransactionWithCategory> getTransactionsWithCategories(int userId, String startDate, String endDate);
     @Query("SELECT c.cateIcon, c.cateName, SUM(t.amount) AS totalAmount, "
             + "ROUND((SUM(t.amount) * 100.0 / (SELECT SUM(amount) FROM `Transaction` WHERE userId = :userId)), 2) AS percentage "
             + "FROM `Transaction` t "
