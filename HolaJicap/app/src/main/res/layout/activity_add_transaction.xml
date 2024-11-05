@@ -154,18 +154,23 @@
     </LinearLayout>
 
     <!-- Button Add Transaction -->
+
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="match_parent"
+        android:layout_width="391dp"
         android:layout_height="wrap_content"
-        android:text="Lưu"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="13dp"
         android:backgroundTint="@color/green"
-        android:layout_marginTop="16dp" />
+        android:text="Lưu"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
+
     <Button
         android:id="@+id/logOutBtn"
-        android:layout_width="match_parent"
+        android:layout_width="390dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="16dp"
         android:text="Logout" />
 </LinearLayout>
