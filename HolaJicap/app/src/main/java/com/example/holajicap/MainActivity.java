@@ -10,11 +10,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.holajicap.adapter.ViewPagerAdapter;
-import com.example.holajicap.db.HolaJicapDatabase;
 
 import me.relex.circleindicator.CircleIndicator3;
 
@@ -30,13 +28,13 @@ public class MainActivity extends AppCompatActivity {
     private Runnable runnable;
     private int currentPage = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button loginButton = findViewById(R.id.signIn);
         Button registerButton = findViewById(R.id.signUp);
+
         // Thay đổi màu của status bar
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

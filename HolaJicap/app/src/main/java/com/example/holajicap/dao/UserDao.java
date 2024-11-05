@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.holajicap.model.User;
 
@@ -25,6 +26,9 @@ public interface UserDao {
 
     @Query("SELECT * FROM User WHERE username = :username")
     User checkUsernameExists(String username);
+
+    @Update
+    void updateUser(User user);
 
     @Delete
     void delete(User user);
