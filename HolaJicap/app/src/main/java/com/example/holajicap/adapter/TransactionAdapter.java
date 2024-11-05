@@ -39,7 +39,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         holder.amountTextView.setText(String.valueOf(transaction.getAmount())); // Đảm bảo amount là String
         holder.categoryTextView.setText(transaction.getNote());
-        holder.dateTextView.setText(transaction.getNote());
+        holder.dateTextView.setText(transaction.getDate());
 
 
 
