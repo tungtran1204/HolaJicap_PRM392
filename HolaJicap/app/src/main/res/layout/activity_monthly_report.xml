@@ -20,11 +20,11 @@
             <!-- Monthly Report Section -->
             <RelativeLayout
                 android:id="@+id/monthly_report_section"
-                android:background="@color/dark_gray"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/dark_gray"
                 android:padding="16dp">
 
                 <!-- Balance Section -->
@@ -32,8 +32,8 @@
                     android:id="@+id/balance_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <!-- Back Button -->
                     <ImageView
@@ -47,9 +47,9 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="120dp"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:layout_marginStart="120dp"
                         android:paddingStart="16dp">
 
                         <TextView
@@ -57,36 +57,36 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Số dư"
-                            android:textSize="14sp"
-                            android:textColor="@android:color/white" />
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/total_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 ₫"
-                            android:textSize="14sp"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <!-- Tab Layout for Monthly Data -->
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tab_layout"
-                    android:layout_below="@id/balance_section"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/balance_section"
                     android:layout_marginTop="16dp"
                     android:background="@color/dark_gray"
-                    app:tabTextColor="@android:color/white"
+                    app:tabIndicatorColor="@color/green"
                     app:tabSelectedTextColor="@color/green"
-                    app:tabIndicatorColor="@color/green" />
+                    app:tabTextColor="@android:color/white" />
                 <!-- ViewPager2 for Switching Tabs -->
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tab_layout"/>
+                    android:layout_below="@id/tab_layout" />
 
 
             </RelativeLayout>
@@ -98,9 +98,9 @@
                 android:id="@+id/chart1_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/dark_gray"
-                android:layout_marginTop="16dp">
+                android:padding="8dp">
 
                 <LinearLayout
                     android:id="@+id/net_income_section"
@@ -114,8 +114,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Thu nhập ròng"
-                        android:textSize="18sp"
-                        android:textColor="@android:color/white" />
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
+
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/barChart"
                         android:layout_width="match_parent"
@@ -129,25 +130,24 @@
                 android:id="@+id/chart2_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@color/dark_gray"
-                >
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/expense_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Khoản chi"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
 
-                <!--                <com.github.mikephil.charting.charts.PieChart-->
-                <!--                    android:id="@+id/pie_chart_expense"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="200dp"-->
-                <!--                    android:layout_below="@id/expense_label"-->
-                <!--                    android:layout_marginTop="8dp" />-->
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pie_chart_expense"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_below="@id/expense_label"
+                    android:layout_marginTop="8dp" />
             </RelativeLayout>
 
             <!-- Khoản thu Section (Pie Chart) -->
@@ -155,25 +155,24 @@
                 android:id="@+id/chart3_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@color/dark_gray"
-                >
+                android:padding="16dp">
 
                 <TextView
                     android:id="@+id/income_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Khoản thu"
-                    android:textSize="18sp"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp" />
 
-                <!--                <com.github.mikephil.charting.charts.PieChart-->
-                <!--                    android:id="@+id/pie_chart_income"-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="200dp"-->
-                <!--                    android:layout_below="@id/income_label"-->
-                <!--                    android:layout_marginTop="8dp" />-->
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pie_chart_income"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_below="@id/income_label"
+                    android:layout_marginTop="8dp" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
