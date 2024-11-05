@@ -27,4 +27,8 @@ public interface WalletDao {
 
     @Query("UPDATE Wallet SET balance = balance + :amountDelta WHERE walletId = :walletId")
     void updateWalletBalance(int walletId, double amountDelta);
+
+    @Query("SELECT SUM(balance) FROM Wallet WHERE userId = :userId")
+    double getTotalBalanceByUserId(int userId);
+
 }
