@@ -12,12 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.room.Room;
 
 import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.User;
@@ -76,7 +71,7 @@ public class SignUpActivity extends AppCompatActivity {
                         editor.putInt("userId", newUser.getUid());
                         editor.apply();
                         Log.d("SignUpActivity", "Đăng ky thành công: " + newUser.email);
-                        Intent intent = new Intent(SignUpActivity.this, AddTransactionActivity.class);
+                        Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
                         startActivity(intent);
                         Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                         finish();
