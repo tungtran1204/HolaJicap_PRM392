@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 
 
 import com.example.holajicap.adapter.FragmentPagerAdapter;
+import com.example.holajicap.fragment.AccountFragment;
 import com.example.holajicap.fragment.OverviewFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -27,7 +28,7 @@ public class NavigationActivity extends AppCompatActivity {
         adapter.addFragment(new OverviewFragment());   // Position 0
 //        adapter.addFragment(new WalletFragment()); // Position 1
 //        adapter.addFragment(new AddFragment());    // Position 2 - Cho nay dung Activity -> Ko dung Fragment
-//        adapter.addFragment(new AccountFragment()); // Position 3
+        adapter.addFragment(new AccountFragment()); // Position 3
 
         viewPager.setAdapter(adapter);
 
