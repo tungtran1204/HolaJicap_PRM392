@@ -83,20 +83,20 @@ public class AccountFragment extends Fragment {
         TextView email = view.findViewById(R.id.tv_account_email);
         email.setText(user.getEmail());
         Button logOutBtn = view.findViewById(R.id.logOutBtn);
-//        logOutBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.remove("userId");
-//                editor.clear();
-//                editor.apply();
-//
-//                Intent intent = new Intent(AccountFragment.this, MainActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
+        logOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("userId");
+                editor.clear();
+                editor.apply();
+
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
         // Inflate the layout for this fragment
         return view;
 
