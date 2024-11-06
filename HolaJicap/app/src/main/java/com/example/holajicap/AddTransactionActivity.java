@@ -185,8 +185,8 @@ public class AddTransactionActivity extends AppCompatActivity {
                     calendar.set(selectedYear, selectedMonth, selectedDay);
                     Date selectedDate = calendar.getTime();
 
-                    // Định dạng ngày theo "yyyy/MM/dd" để lưu
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+                    // Định dạng ngày theo "dd/MM/yyyy" để lưu
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                     String formattedDate = sdf.format(selectedDate);
 
                     // Cập nhật TextView hiển thị dạng "dd/MM/yyyy"
