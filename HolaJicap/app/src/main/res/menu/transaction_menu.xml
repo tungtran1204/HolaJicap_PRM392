@@ -7,14 +7,4 @@
         android:icon="@drawable/search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom|collapseActionView" />
-
-    <item
-        android:id="@+id/action_timeline"
-        android:title="Khoảng thời gian"/>
-    <item
-        android:id="@+id/action_change_balance"
-        android:title="Điều chỉnh số dư"/>
-    <item
-        android:id="@+id/action_transfer_money"
-        android:title="Chuyển tiền đến ví khác"/>
 </menu>

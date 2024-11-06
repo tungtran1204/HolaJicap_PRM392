@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.holajicap.dao.CategoryDao;
 import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.Transaction;
 
@@ -49,6 +50,16 @@ public class EditTransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_transaction);
+
+        ImageView back_icon = findViewById(R.id.left_icon);
+        TextView toolbar_title = findViewById(R.id.toolbar_title);
+        back_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        toolbar_title.setText("Chỉnh sửa hoặc xoá giao dịch");
 
         // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
@@ -153,11 +164,41 @@ public class EditTransactionActivity extends AppCompatActivity {
 
     private void deleteTransaction() {
         db.runInTransaction(() -> {
-            db.transactionDao().deleteById(transactionId); // Xóa giao dịch theo ID
-            runOnUiThread(() -> {
-                Toast.makeText(this, "Giao dịch đã được xóa!", Toast.LENGTH_SHORT).show();
-                finish();
-            });
+            // Lấy thông tin giao dịch cần xóa
+            Transaction transactionToDelete = db.transactionDao().getTransactionById(transactionId);
+
+            if (transactionToDelete != null) {
+                // Lấy ví và số tiền từ giao dịch
+                int selectedWalletId = transactionToDelete.getWalletId();
+                double amount = transactionToDelete.getAmount();
+                CategoryDao categoryDao = db.categoryDao();
+                String selectedCategoryType = categoryDao.getCategoryById(transactionToDelete.getCateId()).getCateType();
+
+                // Điều chỉnh số dư ví
+                if (selectedCategoryType != null) {
+                    if (selectedCategoryType.equals("Expenditure")) {
+                        // Trừ số tiền cho ví nếu là chi tiêu
+                        db.walletDao().updateWalletBalance(selectedWalletId, amount);
+                    } else if (selectedCategoryType.equals("Revenue")) {
+                        // Cộng số tiền cho ví nếu là thu nhập
+                        db.walletDao().updateWalletBalance(selectedWalletId, -amount);
+                    }
+                }
+
+                // Xóa giao dịch
+                db.transactionDao().deleteById(transactionId);
+
+                // Thông báo và quay lại màn hình trước
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Giao dịch đã được xóa!", Toast.LENGTH_SHORT).show();
+                    // Gửi Intent để yêu cầu ViewTransactionActivity cập nhật dữ liệu
+                    Intent intent = new Intent(EditTransactionActivity.this, ViewTransactionActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Đảm bảo rằng Activity trước đó sẽ được khởi động lại.
+                    startActivity(intent);
+                    finish();
+                });
+            }
         });
     }
+
 }
