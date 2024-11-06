@@ -18,7 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.User;
+import com.example.holajicap.model.Wallet;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Date;
 
 public class SignUpActivity extends AppCompatActivity {
     private TextInputEditText emailInput, passwordInput;
@@ -79,6 +82,18 @@ public class SignUpActivity extends AppCompatActivity {
                             editor.putBoolean("isLoggedIn", true);
                             editor.putInt("userId", registeredUser.getUid());
                             editor.apply();
+
+                            Date currentDate = new Date();
+                            Wallet newWallet1 = new Wallet(0, registeredUser.getUid(), "Ví tiền mặt",
+                                    0, "đ", "Sử dụng tiền mặt", currentDate);
+                            Wallet newWallet2 = new Wallet(0, registeredUser.getUid(), "Ví thẻ",
+                                    0, "đ", "Sử dụng thẻ", currentDate);
+                            Wallet newWallet3 = new Wallet(0, registeredUser.getUid(), "Khác",
+                                    0, "đ", "Sử dụng phương thức khác", currentDate);
+
+                            db.walletDao().insert(newWallet1);
+                            db.walletDao().insert(newWallet2);
+                            db.walletDao().insert(newWallet3);
 
                             Log.d("SignUpActivity", "Đăng ký thành công: " + registeredUser.getEmail());
                             Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
