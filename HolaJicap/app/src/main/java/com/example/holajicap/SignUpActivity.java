@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -61,16 +63,20 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignUpActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                } else if (!isValidEmail(email)) {
+                    Toast.makeText(SignUpActivity.this, "Email không đúng định dạng", Toast.LENGTH_SHORT).show();
                 } else {
                     if (db.userDao().checkEmailExists(email) == null) {
-                        User newUser = new User(0,null, password, email, 1); // Thêm email, password
+                        User newUser = new User(0, null, password, email, 1);
                         db.userDao().signUp(newUser);
+
                         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean("isLoggedIn", true);
                         editor.putInt("userId", newUser.getUid());
                         editor.apply();
-                        Log.d("SignUpActivity", "Đăng ky thành công: " + newUser.email);
+
+                        Log.d("SignUpActivity", "Đăng ký thành công: " + newUser.email);
                         Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
                         startActivity(intent);
                         Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
@@ -81,5 +87,9 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+
+    }
+    private boolean isValidEmail(CharSequence email) {
+        return !TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
