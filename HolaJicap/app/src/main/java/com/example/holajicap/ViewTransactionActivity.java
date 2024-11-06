@@ -3,6 +3,7 @@ package com.example.holajicap;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.holajicap.adapter.TransactionAdapter;
+import com.example.holajicap.dao.CategoryDao;
 import com.example.holajicap.dao.TransactionDao;
 import com.example.holajicap.dao.UserDao;
 import com.example.holajicap.dao.WalletDao;
@@ -28,6 +30,7 @@ public class ViewTransactionActivity extends AppCompatActivity {
     private TextView tvBalance;
     private WalletDao walletDao;
     private TransactionDao transactionDao;
+    private CategoryDao categoryDao;
     private int currentUserId;
 
     @Override
@@ -35,12 +38,18 @@ public class ViewTransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_transaction);
 
-        // Khởi tạo TextView
-        tvBalance = findViewById(R.id.tv_balance);
-
-        // Thiết lập Toolbar như là ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Hiển thị nút quay lại (Back)
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
+
+        // Khởi tạo TextView
+        tvBalance = findViewById(R.id.tv_balance);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -48,6 +57,7 @@ public class ViewTransactionActivity extends AppCompatActivity {
         // Kết nối với cơ sở dữ liệu
         HolaJicapDatabase db = HolaJicapDatabase.getInstance(this);
         transactionDao = db.transactionDao();
+        categoryDao = db.categoryDao();
         walletDao = db.walletDao();
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
@@ -62,7 +72,7 @@ public class ViewTransactionActivity extends AppCompatActivity {
         }
 
         // Thiết lập Adapter cho RecyclerView
-        adapter = new TransactionAdapter(this, transactions);
+        adapter = new TransactionAdapter(this, transactions, categoryDao);
         recyclerView.setAdapter(adapter);
 
         // Lấy tổng số tiền và hiển thị
@@ -79,6 +89,16 @@ public class ViewTransactionActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Kiểm tra nếu item được chọn là nút back
+        if (item.getItemId() == android.R.id.home) {
+            // Quay lại màn hình trước đó
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     // Thêm phương thức onDestroy nếu cần
     @Override

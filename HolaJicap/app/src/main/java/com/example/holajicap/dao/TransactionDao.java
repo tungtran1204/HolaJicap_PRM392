@@ -46,4 +46,7 @@ public interface TransactionDao {
     @Query("SELECT * FROM `Transaction` WHERE userId = :userId AND date BETWEEN :startDate AND :endDate")
     List<TransactionWithCategory> getTransactionsWithCategories(int userId, String startDate, String endDate);
 
+    @Query("DELETE FROM 'Transaction' WHERE transId = :transId")
+    void deleteById(int transId);
+
 }
