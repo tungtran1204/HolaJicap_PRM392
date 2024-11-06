@@ -52,6 +52,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 //==============Sign up=================
+        //==============Sign up=================
         db = HolaJicapDatabase.getInstance(getApplicationContext());
         emailInput = findViewById(R.id.usname);
         passwordInput = findViewById(R.id.password);
@@ -70,23 +71,30 @@ public class SignUpActivity extends AppCompatActivity {
                         User newUser = new User(0, null, password, email, 1);
                         db.userDao().signUp(newUser);
 
-                        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("isLoggedIn", true);
-                        editor.putInt("userId", newUser.getUid());
-                        editor.apply();
+                        User registeredUser = db.userDao().getUserByEmail(email);
 
-                        Log.d("SignUpActivity", "Đăng ký thành công: " + newUser.email);
-                        Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
-                        startActivity(intent);
-                        Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                        finish();
+                        if (registeredUser != null) {
+                            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("isLoggedIn", true);
+                            editor.putInt("userId", registeredUser.getUid());
+                            editor.apply();
+
+                            Log.d("SignUpActivity", "Đăng ký thành công: " + registeredUser.getEmail());
+                            Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(SignUpActivity.this, "Lỗi đăng ký người dùng!", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(SignUpActivity.this, "Email đã tồn tại!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
+
 
     }
     private boolean isValidEmail(CharSequence email) {
