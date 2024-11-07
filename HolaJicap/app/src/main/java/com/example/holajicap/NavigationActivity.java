@@ -79,8 +79,9 @@ public class NavigationActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(0);
                 return true;
             } else if (itemId == R.id.mWallet) {
+                Log.d("NavigationActivity", "Opening ViewTransactionActivity");
                 Intent intent = new Intent(NavigationActivity.this, ViewTransactionActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 2); // Use a request code like 2
                 return true;
             } else if (itemId == R.id.mAdd) {
                 Log.d("NavigationActivity", "Opening AddTransactionActivity");
@@ -117,6 +118,7 @@ public class NavigationActivity extends AppCompatActivity {
                 Log.d("NavigationActivity", "OverviewFragment not visible or not found. Ensure it's loaded correctly.");
             }
         }
+
     }
 
 }
