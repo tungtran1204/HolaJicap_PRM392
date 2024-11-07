@@ -63,7 +63,7 @@ public interface TransactionDao {
     @Query("SELECT SUM(t.amount) FROM 'Transaction' t " +
             "JOIN Category c ON t.cateId = c.cateId " +
             "WHERE c.cateType = 'Revenue' " +
-            "AND strftime('%Y-%m', date(substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2))) = strftime('%Y-%m', 'now') " +
+            "AND strftime('%Y-%m', date(substr(t.date, 1, 4) || '-' || substr(t.date, 6, 2) || '-' || substr(t.date, 9, 2))) = strftime('%Y-%m', 'now') " +
             "AND t.userId = :userId")
     LiveData<Double> getTotalRevenueCurrentMonth(int userId);
 
@@ -71,7 +71,7 @@ public interface TransactionDao {
     @Query("SELECT SUM(t.amount) FROM 'Transaction' t " +
             "JOIN Category c ON t.cateId = c.cateId " +
             "WHERE c.cateType = 'Expenditure' " +
-            "AND strftime('%Y-%m', date(substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2))) = strftime('%Y-%m', 'now') " +
+            "AND strftime('%Y-%m', date(substr(t.date, 1, 4) || '-' || substr(t.date, 6, 2) || '-' || substr(t.date, 9, 2))) = strftime('%Y-%m', 'now') " +
             "AND t.userId = :userId")
     LiveData<Double> getTotalExpenditureCurrentMonth(int userId);
 
@@ -79,7 +79,7 @@ public interface TransactionDao {
     @Query("SELECT SUM(t.amount) FROM 'Transaction' t " +
             "JOIN Category c ON t.cateId = c.cateId " +
             "WHERE c.cateType = 'Revenue' " +
-            "AND strftime('%Y-%m', date(substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2))) = strftime('%Y-%m', 'now', '-1 month') " +
+            "AND strftime('%Y-%m', date(substr(t.date, 1, 4) || '-' || substr(t.date, 6, 2) || '-' || substr(t.date, 9, 2))) = strftime('%Y-%m', 'now', '-1 month') " +
             "AND t.userId = :userId")
     LiveData<Double> getTotalRevenueLastMonth(int userId);
 
@@ -87,7 +87,7 @@ public interface TransactionDao {
     @Query("SELECT SUM(t.amount) FROM 'Transaction' t " +
             "JOIN Category c ON t.cateId = c.cateId " +
             "WHERE c.cateType = 'Expenditure' " +
-            "AND strftime('%Y-%m', date(substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2))) = strftime('%Y-%m', 'now', '-1 month') " +
+            "AND strftime('%Y-%m', date(substr(t.date, 1, 4) || '-' || substr(t.date, 6, 2) || '-' || substr(t.date, 9, 2))) = strftime('%Y-%m', 'now', '-1 month') " +
             "AND t.userId = :userId")
     LiveData<Double> getTotalExpenditureLastMonth(int userId);
 }
