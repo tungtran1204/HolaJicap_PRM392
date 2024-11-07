@@ -1,31 +1,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_spending"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/dark_gray"
     android:orientation="horizontal"
-    android:padding="8dp"
-    android:background="@color/dark_gray">
+    android:padding="8dp">
 
     <ImageView
-        android:id="@+id/iv_spending_icon"
+        android:id="@+id/iconView"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@color/light_gray"
-        android:src="@drawable/baseline_message_24"
-        android:contentDescription="Spending Icon" />
+        android:contentDescription="Spending Icon"
+        android:src="@drawable/baseline_message_24" />
 
     <TextView
-        android:id="@+id/tv_spending_name"
+        android:id="@+id/nameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:paddingStart="16dp"
         android:text="Category Name"
-        android:textColor="@color/light_gray"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/tv_spending_percentage"
+        android:id="@+id/amountTextView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

@@ -16,8 +16,8 @@ import com.example.holajicap.model.Transaction;
 import com.example.holajicap.model.User;
 import com.example.holajicap.model.Wallet;
 
-@Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 5)
-@TypeConverters({Converter.class})
+@Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 6)
+@TypeConverters({DateConverter.class})
 public abstract class HolaJicapDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract CategoryDao categoryDao();
@@ -27,6 +27,7 @@ public abstract class HolaJicapDatabase extends RoomDatabase {
     private static HolaJicapDatabase instance;
 
     public static HolaJicapDatabase getInstance(Context context){
+
 
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),

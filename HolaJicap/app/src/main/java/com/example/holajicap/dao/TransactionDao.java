@@ -4,10 +4,10 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.example.holajicap.model.CategorySpending;
 import com.example.holajicap.model.Transaction;
 import com.example.holajicap.model.TransactionWithCategory;
 
-import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -49,4 +49,12 @@ public interface TransactionDao {
     @Query("DELETE FROM 'Transaction' WHERE transId = :transId")
     void deleteById(int transId);
 
+    @Query("SELECT c.cateIcon AS cateIcon, c.cateName AS cateName, SUM(t.amount) AS totalAmount "
+            + "FROM `Transaction` t "
+            + "JOIN Category c ON t.cateId = c.cateId "
+            + "WHERE t.userId = :userId AND c.cateType = 'Expenditure' "
+            + "GROUP BY c.cateId, c.cateIcon, c.cateName "
+            + "ORDER BY totalAmount DESC "
+            + "LIMIT 5")
+    List<CategorySpending> getTotalAmountPerCategory(int userId);
 }

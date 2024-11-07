@@ -185,8 +185,8 @@ public class AddTransactionActivity extends AppCompatActivity {
                     calendar.set(selectedYear, selectedMonth, selectedDay);
                     Date selectedDate = calendar.getTime();
 
-                    // Định dạng ngày theo "yyyy/MM/dd" để lưu
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+                    // Định dạng ngày theo "dd/MM/yyyy" để lưu
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
                     String formattedDate = sdf.format(selectedDate);
 
                     // Cập nhật TextView hiển thị dạng "dd/MM/yyyy"
@@ -245,6 +245,8 @@ public class AddTransactionActivity extends AppCompatActivity {
                 // Hiển thị thông báo thành công
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
+                    Intent resultIntent = new Intent();
+                    setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 });
             } else {

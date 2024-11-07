@@ -1,9 +1,15 @@
 package com.example.holajicap;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 
@@ -15,20 +21,27 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class NavigationActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
+    private int userId;
+    private FragmentPagerAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        // Lấy userId từ SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId", -1);
+
         ViewPager viewPager = findViewById(R.id.viewPager);
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
 
-        FragmentPagerAdapter adapter = new FragmentPagerAdapter(getSupportFragmentManager());
+        adapter = new FragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OverviewFragment());   // Position 0
 //        adapter.addFragment(new WalletFragment()); // Position 1
 //        adapter.addFragment(new AddFragment());    // Position 2 - Cho nay dung Activity -> Ko dung Fragment
-        adapter.addFragment(new AccountFragment()); // Position 3
+        adapter.addFragment(new AccountFragment());    // Position 3
 
         viewPager.setAdapter(adapter);
 
@@ -70,8 +83,9 @@ public class NavigationActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (itemId == R.id.mAdd) {
+                Log.d("NavigationActivity", "Opening AddTransactionActivity");
                 Intent intent = new Intent(NavigationActivity.this, AddTransactionActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);  // Use a request code like 1
                 return true;
             } else if (itemId == R.id.mAccount) {
                 viewPager.setCurrentItem(3);
@@ -79,6 +93,30 @@ public class NavigationActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    public Fragment getFragmentAtPosition(int position) {
+        return adapter.getItem(position);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            Log.d("NavigationActivity", "AddTransactionActivity completed successfully");
+
+            BottomNavigationView bottomNav = findViewById(R.id.navigation);
+            bottomNav.setSelectedItemId(R.id.mHome);
+
+            // Check if OverviewFragment is loaded and try refreshing data
+            OverviewFragment overviewFragment = (OverviewFragment) adapter.getItem(0); // Giả sử OverviewFragment ở vị trí 0
+
+            if (overviewFragment != null && overviewFragment.isVisible()) {
+                Log.d("NavigationActivity", "OverviewFragment is visible. Triggering data refresh.");
+                overviewFragment.refreshData();  // Assuming refreshData() is a method in OverviewFragment
+            } else {
+                Log.d("NavigationActivity", "OverviewFragment not visible or not found. Ensure it's loaded correctly.");
+            }
+        }
     }
 
 }

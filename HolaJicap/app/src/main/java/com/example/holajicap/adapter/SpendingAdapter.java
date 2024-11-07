@@ -1,56 +1,78 @@
 package com.example.holajicap.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.holajicap.R;
-import com.example.holajicap.model.SpendingItem;
-
+import com.example.holajicap.model.CategorySpending;
 import java.util.List;
 
 public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.SpendingViewHolder> {
 
-    private final List<SpendingItem> spendingItems;
+    private final List<CategorySpending> categorySpendingList;
+    private final Context context;
 
-    public SpendingAdapter(List<SpendingItem> spendingItems) {
-        this.spendingItems = spendingItems;
+    public SpendingAdapter(Context context, List<CategorySpending> categorySpendingList) {
+        this.context = context;
+        this.categorySpendingList = categorySpendingList;
     }
 
     @NonNull
     @Override
     public SpendingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_spending, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_spending, parent, false);
         return new SpendingViewHolder(view);
+    }
+
+    public void setData(List<CategorySpending> newData) {
+        categorySpendingList.clear();
+        if (newData != null) {
+            categorySpendingList.addAll(newData);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
     public void onBindViewHolder(@NonNull SpendingViewHolder holder, int position) {
-        SpendingItem item = spendingItems.get(position);
-        holder.icon.setImageResource(item.getIconResId());
-        holder.name.setText(item.getName());
-        holder.percentage.setText(item.getPercentage() + "%");
+        CategorySpending item = categorySpendingList.get(position);
+
+        // Set category icon based on cateIcon
+        int iconResId = context.getResources().getIdentifier(
+                item.getCateIcon(), "drawable", context.getPackageName());
+        if (iconResId != 0) {
+            holder.iconImageView.setImageResource(iconResId);
+        } else {
+            // Set a default icon or handle the case where the icon is not found
+            holder.iconImageView.setImageResource(R.drawable.logo); // Thay bằng tài nguyên mặc định
+        }
+
+        // Set category name
+        holder.categoryNameTextView.setText(item.getCateName());
+
+        // Display total amount for the category
+        holder.amountTextView.setText(String.format("%.0f VND", item.getTotalAmount()));
     }
 
     @Override
     public int getItemCount() {
-        return spendingItems.size();
+        return categorySpendingList.size();
     }
 
-    static class SpendingViewHolder extends RecyclerView.ViewHolder {
-        ImageView icon;
-        TextView name, percentage;
+    public static class SpendingViewHolder extends RecyclerView.ViewHolder {
+        ImageView iconImageView;
+        TextView categoryNameTextView;
+        TextView amountTextView;
 
-        SpendingViewHolder(View itemView) {
+        public SpendingViewHolder(@NonNull View itemView) {
             super(itemView);
-            icon = itemView.findViewById(R.id.iv_spending_icon);
-            name = itemView.findViewById(R.id.tv_spending_name);
-            percentage = itemView.findViewById(R.id.tv_spending_percentage);
+            iconImageView = itemView.findViewById(R.id.iconView);
+            categoryNameTextView = itemView.findViewById(R.id.nameTextView);
+            amountTextView = itemView.findViewById(R.id.amountTextView1);
         }
     }
 }
