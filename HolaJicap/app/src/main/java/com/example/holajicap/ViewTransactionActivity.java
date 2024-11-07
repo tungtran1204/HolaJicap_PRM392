@@ -1,9 +1,11 @@
 package com.example.holajicap;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.Transaction;
 import com.example.holajicap.model.Wallet;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,14 +81,40 @@ public class ViewTransactionActivity extends AppCompatActivity {
         // Lấy tổng số tiền và hiển thị
         new Thread(() -> {
             double totalBalance = walletDao.getTotalBalanceByUserId(currentUserId);
-            runOnUiThread(() -> tvBalance.setText(String.valueOf(totalBalance)));
+
+            // Định dạng số tiền
+            DecimalFormat decimalFormat = new DecimalFormat("#,###"); // Định dạng không có dấu thập phân
+            final String formattedBalance = decimalFormat.format(totalBalance);
+
+            runOnUiThread(() -> tvBalance.setText(formattedBalance));
         }).start();
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Gắn menu vào Toolbar
         getMenuInflater().inflate(R.menu.transaction_menu, menu);
+
+        // Lấy SearchView từ menu
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        // Thiết lập listener cho SearchView
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Khi người dùng nhấn nút tìm kiếm
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Khi người dùng nhập vào SearchView
+                adapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
         return true;
     }
 
@@ -93,11 +122,21 @@ public class ViewTransactionActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Kiểm tra nếu item được chọn là nút back
         if (item.getItemId() == android.R.id.home) {
-            // Quay lại màn hình trước đó
-            onBackPressed();
+            navigateToNavigationActivity();
             return true;
+        } else if (item.getItemId() == R.id.action_search) {
+            // Khi nhấn vào biểu tượng tìm kiếm
+            return true; // Trả về true để cho phép xử lý tiếp
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void navigateToNavigationActivity() {
+        Intent intent = new Intent(ViewTransactionActivity.this, NavigationActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish(); // Kết thúc Activity hiện tại để không quay lại được nó nữa
     }
 
     // Thêm phương thức onDestroy nếu cần
