@@ -127,7 +127,7 @@ public class MonthlyReportActivity extends AppCompatActivity {
     }
 
     private String formatDate(Date date) {
-        return new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(date);
+        return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(date);
     }
 
     private void updateBarChart(String[] dateRange) {
@@ -150,7 +150,7 @@ public class MonthlyReportActivity extends AppCompatActivity {
     }
 
     private void categorizeTransactions(List<Transaction> transactions, float[] incomeTotals, float[] expenseTotals) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         for (Transaction transaction : transactions) {
             try {
                 int index = getTransactionIndex(sdf.parse(transaction.getDate()));

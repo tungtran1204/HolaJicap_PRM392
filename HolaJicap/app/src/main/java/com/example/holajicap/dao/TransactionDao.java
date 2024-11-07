@@ -1,5 +1,6 @@
 package com.example.holajicap.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -57,4 +58,36 @@ public interface TransactionDao {
             + "ORDER BY totalAmount DESC "
             + "LIMIT 5")
     List<CategorySpending> getTotalAmountPerCategory(int userId);
+
+    // Tổng doanh thu tháng này
+    @Query("SELECT SUM(t.amount) FROM 'Transaction' t " +
+            "JOIN Category c ON t.cateId = c.cateId " +
+            "WHERE c.cateType = 'Revenue' " +
+            "AND strftime('%Y-%m', date(substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2))) = strftime('%Y-%m', 'now') " +
+            "AND t.userId = :userId")
+    LiveData<Double> getTotalRevenueCurrentMonth(int userId);
+
+    // Tổng chi tiêu tháng này
+    @Query("SELECT SUM(t.amount) FROM 'Transaction' t " +
+            "JOIN Category c ON t.cateId = c.cateId " +
+            "WHERE c.cateType = 'Expenditure' " +
+            "AND strftime('%Y-%m', date(substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2))) = strftime('%Y-%m', 'now') " +
+            "AND t.userId = :userId")
+    LiveData<Double> getTotalExpenditureCurrentMonth(int userId);
+
+    // Tổng doanh thu tháng trước
+    @Query("SELECT SUM(t.amount) FROM 'Transaction' t " +
+            "JOIN Category c ON t.cateId = c.cateId " +
+            "WHERE c.cateType = 'Revenue' " +
+            "AND strftime('%Y-%m', date(substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2))) = strftime('%Y-%m', 'now', '-1 month') " +
+            "AND t.userId = :userId")
+    LiveData<Double> getTotalRevenueLastMonth(int userId);
+
+    // Tổng chi tiêu tháng trước
+    @Query("SELECT SUM(t.amount) FROM 'Transaction' t " +
+            "JOIN Category c ON t.cateId = c.cateId " +
+            "WHERE c.cateType = 'Expenditure' " +
+            "AND strftime('%Y-%m', date(substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2))) = strftime('%Y-%m', 'now', '-1 month') " +
+            "AND t.userId = :userId")
+    LiveData<Double> getTotalExpenditureLastMonth(int userId);
 }

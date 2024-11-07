@@ -166,137 +166,127 @@
                     android:textSize="18sp" />
 
                 <RelativeLayout
-                    android:id="@+id/monthly_report_section_chart"
+                    android:id="@+id/monthly_report_section_part"
+                    android:layout_below="@id/tv_monthly_report_label"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/dark_gray"
                     android:padding="16dp"
-                    android:layout_below="@id/tv_monthly_report_label"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="16dp"
+                    android:background="@color/dark_gray">
 
-                    <!-- Top Row: Spent and Income Labels with Values -->
-                    <TextView
-                        android:id="@+id/tv_total_spent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginLeft="50dp"
-                        android:text="Tổng đã chi"
-                        android:textColor="@color/red"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/tv_spent_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_total_spent"
-                        android:layout_alignStart="@id/tv_total_spent"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:id="@+id/tv_total_income"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginEnd="50dp"
-                        android:text="Tổng thu"
-                        android:textColor="@color/blue"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/tv_income_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_total_income"
-                        android:layout_alignEnd="@id/tv_total_income"
-                        android:text="0"
-                        android:textColor="@color/white"
-                        android:textSize="18sp" />
-
-                    <!-- Divider Line -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@id/tv_spent_value"
-                        android:layout_marginTop="8dp"
-                        android:background="@color/light_gray" />
-
-                    <!-- Chart Section -->
+                    <!-- Horizontal LinearLayout for This Month and Last Month -->
                     <LinearLayout
-                        android:id="@+id/chart_section"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:layout_below="@id/tv_spent_value"
-                        android:layout_marginTop="16dp"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:weightSum="2"
                         android:gravity="center">
 
-                        <!-- "Tháng này" Red Bar -->
+                        <!-- This Month Section -->
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="bottom"
-                            android:orientation="vertical">
-
-                            <View
-                                android:layout_width="20dp"
-                                android:layout_height="100dp"
-                                android:background="@color/red"
-                                />
+                            android:orientation="vertical"
+                            android:padding="8dp">
 
                             <TextView
+                                android:id="@+id/tv_this_month_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
+                                android:text="Tháng này"
+                                android:textColor="@color/green"
+                                android:textSize="18sp"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:id="@+id/tv_this_month_income_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tổng thu"
+                                android:textColor="@color/blue"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/textViewRevenueCurrentMonth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:text="0"
                                 android:textColor="@color/white"
-                                android:textSize="14sp"
-                                android:layout_marginTop="4dp"/>
+                                android:textSize="16sp" />
 
                             <TextView
+                                android:id="@+id/tv_this_month_spent_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:text="Tháng này"
+                                android:layout_marginTop="8dp"
+                                android:text="Tổng chi"
                                 android:textColor="@color/red"
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/textViewExpenditureCurrentMonth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
                         </LinearLayout>
 
-                        <!-- "Trung bình 3 tháng trước" Gray Bar -->
+                        <!-- Last Month Section -->
                         <LinearLayout
                             android:layout_width="0dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="bottom"
-                            android:orientation="vertical">
-
-                            <View
-                                android:layout_width="20dp"
-                                android:layout_height="80dp"
-                                android:background="@color/light_gray" />
+                            android:orientation="vertical"
+                            android:padding="8dp">
 
                             <TextView
+                                android:id="@+id/tv_last_month_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
+                                android:text="Tháng trước"
+                                android:textColor="@color/green"
+                                android:textSize="18sp"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:id="@+id/tv_last_month_income_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tổng thu"
+                                android:textColor="@color/white"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/textViewRevenueLastMonth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textColor="@color/white"
-                                android:textSize="14sp"
-                                android:layout_marginTop="4dp"/>
+                                android:textColor="@color/light_gray"
+                                android:textSize="16sp" />
 
                             <TextView
+                                android:id="@+id/tv_last_month_spent_label"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:text="Trung bình 3 tháng trước"
+                                android:layout_marginTop="8dp"
+                                android:text="Tổng chi"
                                 android:textColor="@color/white"
-                                android:textSize="14sp" />
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/textViewExpenditureLastMonth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textColor="@color/light_gray"
+                                android:textSize="16sp" />
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
+
+
             </RelativeLayout>
 
             <!-- Highest Spending Section -->
