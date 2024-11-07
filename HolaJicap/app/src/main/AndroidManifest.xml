@@ -16,6 +16,9 @@
         android:theme="@style/Theme.HolaJicap"
         tools:targetApi="31">
         <activity
+            android:name=".ChangePasswordAccountActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChangePasswordActivity"
             android:exported="false" />
         <activity android:name=".ChooseCurrencyActivity"

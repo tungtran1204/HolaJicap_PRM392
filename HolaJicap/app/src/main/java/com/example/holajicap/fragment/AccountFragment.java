@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.holajicap.AddTransactionActivity;
+import com.example.holajicap.ChangePasswordAccountActivity;
+import com.example.holajicap.ChangePasswordActivity;
 import com.example.holajicap.MainActivity;
 import com.example.holajicap.R;
 import com.example.holajicap.db.HolaJicapDatabase;
@@ -89,6 +91,7 @@ public class AccountFragment extends Fragment {
             Log.e("AccountFragment", "User not found or userId is invalid");
         }
         Button logOutBtn = view.findViewById(R.id.logOutBtn);
+        Button chnpassBtn = view.findViewById(R.id.btn_Changepassword);
         logOutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +104,14 @@ public class AccountFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
                 getActivity().finish();
+            }
+        });
+
+        chnpassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ChangePasswordAccountActivity.class);
+                startActivity(intent);
             }
         });
         // Inflate the layout for this fragment
