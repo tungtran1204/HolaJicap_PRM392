@@ -1,6 +1,7 @@
 package com.example.holajicap;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -48,13 +49,11 @@ public class ChangePasswordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String newPassword = newPasswordEditText.getText().toString().trim();
 
-                // Kiểm tra xem mật khẩu mới có được nhập không
                 if (TextUtils.isEmpty(newPassword)) {
                     Toast.makeText(ChangePasswordActivity.this, "Vui lòng nhập mật khẩu mới", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Cập nhật mật khẩu
                 updatePassword(userEmail, newPassword);
             }
         });
@@ -67,7 +66,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
         User user = userDao.checkEmailExists(email);
         if (user != null) {
             user.setPassword(newPassword);
-            userDao.updateUser(user); // Gọi phương thức updateUser để cập nhật thông tin
+            userDao.updateUser(user);
+
+            SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("userId", user.getUid());
+            editor.apply();
+
             Toast.makeText(this, "Cập nhật mật khẩu thành công", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(ChangePasswordActivity.this, NavigationActivity.class);

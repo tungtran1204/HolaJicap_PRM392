@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,8 +93,28 @@ public class ViewTransactionActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Gắn menu vào Toolbar
         getMenuInflater().inflate(R.menu.transaction_menu, menu);
+
+        // Lấy SearchView từ menu
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        // Thiết lập listener cho SearchView
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Khi người dùng nhấn nút tìm kiếm
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Khi người dùng nhập vào SearchView
+                adapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
         return true;
     }
 
@@ -101,9 +122,11 @@ public class ViewTransactionActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Kiểm tra nếu item được chọn là nút back
         if (item.getItemId() == android.R.id.home) {
-            // Quay lại màn hình NavigationActivity
             navigateToNavigationActivity();
             return true;
+        } else if (item.getItemId() == R.id.action_search) {
+            // Khi nhấn vào biểu tượng tìm kiếm
+            return true; // Trả về true để cho phép xử lý tiếp
         }
         return super.onOptionsItemSelected(item);
     }
