@@ -39,4 +39,8 @@ public interface UserDao {
     @Query("SELECT * FROM User WHERE email = :email LIMIT 1")
     User getUserByEmail(String email);
 
+    @Query("UPDATE User SET currency_id = :currencyId WHERE uid = :userId")
+    void updateUserCurrency(int userId, int currencyId);
+
+
 }

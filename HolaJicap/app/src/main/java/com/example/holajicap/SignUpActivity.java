@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
                             db.walletDao().insert(newWallet3);
 
                             Log.d("SignUpActivity", "Đăng ký thành công: " + registeredUser.getEmail());
-                            Intent intent = new Intent(SignUpActivity.this, NavigationActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, ChooseCurrencyActivity.class);
                             startActivity(intent);
                             Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                             finish();
