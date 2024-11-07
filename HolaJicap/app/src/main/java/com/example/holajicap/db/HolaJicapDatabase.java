@@ -16,11 +16,8 @@ import com.example.holajicap.model.Transaction;
 import com.example.holajicap.model.User;
 import com.example.holajicap.model.Wallet;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-@Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 5)
-@TypeConverters({Converter.class})
+@Database(entities = {User.class, Wallet.class, Category.class, Transaction.class}, version = 6)
+@TypeConverters({DateConverter.class})
 public abstract class HolaJicapDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract CategoryDao categoryDao();

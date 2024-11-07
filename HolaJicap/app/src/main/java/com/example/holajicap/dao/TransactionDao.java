@@ -46,6 +46,9 @@ public interface TransactionDao {
     @Query("SELECT * FROM `Transaction` WHERE userId = :userId AND date BETWEEN :startDate AND :endDate")
     List<TransactionWithCategory> getTransactionsWithCategories(int userId, String startDate, String endDate);
 
+    @Query("DELETE FROM 'Transaction' WHERE transId = :transId")
+    void deleteById(int transId);
+
     @Query("SELECT c.cateIcon AS cateIcon, c.cateName AS cateName, SUM(t.amount) AS totalAmount "
             + "FROM `Transaction` t "
             + "JOIN Category c ON t.cateId = c.cateId "
@@ -54,6 +57,4 @@ public interface TransactionDao {
             + "ORDER BY totalAmount DESC "
             + "LIMIT 5")
     List<CategorySpending> getTotalAmountPerCategory(int userId);
-
-
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,22 +82,27 @@ public class AccountFragment extends Fragment {
 
         User user = db.userDao().getUserById(userId);
         TextView email = view.findViewById(R.id.tv_account_email);
-        email.setText(user.getEmail());
+        if (user != null) {
+            email.setText(user.getEmail());
+        } else {
+            email.setText("Không tìm thấy email");
+            Log.e("AccountFragment", "User not found or userId is invalid");
+        }
         Button logOutBtn = view.findViewById(R.id.logOutBtn);
-//        logOutBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.remove("userId");
-//                editor.clear();
-//                editor.apply();
-//
-//                Intent intent = new Intent(AccountFragment.this, MainActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
+        logOutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("userId");
+                editor.clear();
+                editor.apply();
+
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
         // Inflate the layout for this fragment
         return view;
 
