@@ -4,10 +4,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.User;
@@ -18,6 +20,8 @@ public class ChangePasswordAccountActivity extends AppCompatActivity {
     private EditText edtnewpass;
     private EditText edtcfpass;
     private Button btncfpass;
+    ImageView backArrow;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,6 +30,8 @@ public class ChangePasswordAccountActivity extends AppCompatActivity {
 
         db = HolaJicapDatabase.getInstance(this);
 
+        backArrow = findViewById(R.id.back_arrow);
+        backArrow.setOnClickListener(v -> goBackToPreviousFragment());
 
         edtcurrentpass = findViewById(R.id.edt_currentpass);
         edtnewpass = findViewById(R.id.edt_newpass);
@@ -34,6 +40,14 @@ public class ChangePasswordAccountActivity extends AppCompatActivity {
 
         btncfpass.setOnClickListener(v -> changePassword());
 
+    }
+    private void goBackToPreviousFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void changePassword() {

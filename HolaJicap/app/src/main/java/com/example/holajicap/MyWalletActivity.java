@@ -66,7 +66,9 @@ public class MyWalletActivity extends AppCompatActivity {
             int balance = (int) wallet.getBalance();
             totalBalance += balance;
         }
-        totalAmountTextView.setText(String.format(Locale.getDefault(), "%,d VND", totalBalance));
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        String currencyCode = sharedPreferences.getString("currency_code", "VND");
+        totalAmountTextView.setText(String.format(Locale.getDefault(), "%,d %s", totalBalance, currencyCode));
     }
 
     private void loadWallets() {

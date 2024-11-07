@@ -19,8 +19,8 @@ public interface CurrencyDao {
     @Query("SELECT * FROM Currency WHERE currency_id = :id")
     Currency getCurrencyById(int id);
 
-
-
+    @Query("SELECT currency_code FROM Currency WHERE currency_id = :currencyId")
+    String getCurrencyCodeById(int currencyId);
 
 
 }

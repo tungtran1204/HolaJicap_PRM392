@@ -42,5 +42,7 @@ public interface UserDao {
     @Query("UPDATE User SET currency_id = :currencyId WHERE uid = :userId")
     void updateUserCurrency(int userId, int currencyId);
 
+    @Query("SELECT currency_id FROM User WHERE uid = :userId")
+    int getCurrencyIdByUserId(int userId);
 
 }

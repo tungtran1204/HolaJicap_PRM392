@@ -1,6 +1,7 @@
 package com.example.holajicap.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
     @Override
     public void onBindViewHolder(@NonNull SpendingViewHolder holder, int position) {
         CategorySpending item = categorySpendingList.get(position);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        String currencyCode = sharedPreferences.getString("currency_code", "VND");
 
         // Set category icon based on cateIcon
         int iconResId = context.getResources().getIdentifier(
@@ -55,7 +58,7 @@ public class SpendingAdapter extends RecyclerView.Adapter<SpendingAdapter.Spendi
         holder.categoryNameTextView.setText(item.getCateName());
 
         // Display total amount for the category
-        holder.amountTextView.setText(String.format("%.0f VND", item.getTotalAmount()));
+        holder.amountTextView.setText(String.format("%.0f %s", item.getTotalAmount(), currencyCode));
     }
 
     @Override

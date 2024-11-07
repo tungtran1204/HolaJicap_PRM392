@@ -22,10 +22,8 @@ import com.example.holajicap.MonthlyReportActivity;
 import com.example.holajicap.MyWalletActivity;
 import com.example.holajicap.NotificationActivity;
 import com.example.holajicap.R;
-import com.example.holajicap.TransactionRepository;
 import com.example.holajicap.TransactionViewModel;
 import com.example.holajicap.adapter.SpendingAdapter;
-import com.example.holajicap.dao.TransactionDao;
 import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.CategorySpending;
 import com.example.holajicap.model.Wallet;
@@ -33,7 +31,6 @@ import com.example.holajicap.model.Wallet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 
 public class OverviewFragment extends Fragment {
 
@@ -52,20 +49,20 @@ public class OverviewFragment extends Fragment {
     private TextView textViewExpenditureCurrentMonth;
     private TextView textViewRevenueLastMonth;
     private TextView textViewExpenditureLastMonth;
+    private String currencyCode;
 
     private static final String TAG = "OverviewFragment";
 
-    public OverviewFragment(){
-
-    }
+    public OverviewFragment() {}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", -1);
-        Log.d("OverviewFragment", "Retrieved current UserId: " + userId);
-        Log.d("OverviewFragment", "UserId: " + userId);
+        currencyCode = sharedPreferences.getString("currency_code", "VND");
+
+        Log.d(TAG, "Retrieved current UserId: " + userId);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
@@ -86,15 +83,14 @@ public class OverviewFragment extends Fragment {
         spendingRecyclerView = view.findViewById(R.id.spendingRecyclerView);
         spendingRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // khoi tao
+        // Initialize ViewModel
         transactionViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getActivity().getApplication())).get(TransactionViewModel.class);
 
-        // Ánh xạ các TextView
+        // Initialize TextViews for revenue and expenditure
         textViewRevenueCurrentMonth = view.findViewById(R.id.textViewRevenueCurrentMonth);
         textViewExpenditureCurrentMonth = view.findViewById(R.id.textViewExpenditureCurrentMonth);
         textViewRevenueLastMonth = view.findViewById(R.id.textViewRevenueLastMonth);
         textViewExpenditureLastMonth = view.findViewById(R.id.textViewExpenditureLastMonth);
-
 
         // Initialize adapter with an empty list initially
         spendingAdapter = new SpendingAdapter(getContext(), new ArrayList<>());
@@ -108,7 +104,7 @@ public class OverviewFragment extends Fragment {
         calculateAndDisplayTotalBalance();
         // Load data
         loadTopCategories();
-       // Thiết lập observer cho LiveData
+        // Thiết lập observer cho LiveData
         setupObservers();
 
         refreshData();
@@ -119,28 +115,28 @@ public class OverviewFragment extends Fragment {
         transactionViewModel.getTotalRevenueCurrentMonth(userId).observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double revenue) {
-                textViewRevenueCurrentMonth.setText((revenue != null ? revenue : 0) + " VND" );
+                textViewRevenueCurrentMonth.setText(String.format(Locale.getDefault(), "%.2f %s", revenue != null ? revenue : 0, currencyCode));
             }
         });
 
         transactionViewModel.getTotalExpenditureCurrentMonth(userId).observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double expenditure) {
-                textViewExpenditureCurrentMonth.setText((expenditure != null ? expenditure : 0)+ " VND");
+                textViewExpenditureCurrentMonth.setText(String.format(Locale.getDefault(), "%.2f %s", expenditure != null ? expenditure : 0, currencyCode));
             }
         });
 
         transactionViewModel.getTotalRevenueLastMonth(userId).observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double revenue) {
-                textViewRevenueLastMonth.setText((revenue != null ? revenue : 0) + " VND");
+                textViewRevenueLastMonth.setText(String.format(Locale.getDefault(), "%.2f %s", revenue != null ? revenue : 0, currencyCode));
             }
         });
 
         transactionViewModel.getTotalExpenditureLastMonth(userId).observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double expenditure) {
-                textViewExpenditureLastMonth.setText((expenditure != null ? expenditure : 0) + " VND");
+                textViewExpenditureLastMonth.setText(String.format(Locale.getDefault(), "%.2f %s", expenditure != null ? expenditure : 0, currencyCode));
             }
         });
     }
@@ -151,33 +147,27 @@ public class OverviewFragment extends Fragment {
             int balance = (int) wallet.getBalance();
             totalBalance += balance;
         }
-        totalAmountTextView1.setText(String.format(Locale.getDefault(), "%,d VND", totalBalance));
-        totalAmountTextView2.setText(String.format(Locale.getDefault(), "%,d VND", totalBalance));
+        totalAmountTextView1.setText(String.format(Locale.getDefault(), "%,d %s", totalBalance, currencyCode));
+        totalAmountTextView2.setText(String.format(Locale.getDefault(), "%,d %s", totalBalance, currencyCode));
     }
 
-
     private void loadTopCategories() {
-
-        Log.d("OverviewFragment", "Using userId: " + userId);
+        Log.d(TAG, "Using userId: " + userId);
 
         new Thread(() -> {
-            TransactionDao transactionDao = db.transactionDao();
-
-            List<CategorySpending> topCategories = transactionDao.getTotalAmountPerCategory(userId);
-            Log.d("OverviewFragment", "Top categories loaded from DB: " + (topCategories != null ? topCategories.size() : "null"));
+            List<CategorySpending> topCategories = db.transactionDao().getTotalAmountPerCategory(userId);
+            Log.d(TAG, "Top categories loaded from DB: " + (topCategories != null ? topCategories.size() : "null"));
 
             requireActivity().runOnUiThread(() -> {
                 if (spendingAdapter != null) {
-                    Log.d("OverviewFragment", "Updating adapter with top categories data");
+                    Log.d(TAG, "Updating adapter with top categories data");
                     spendingAdapter.setData(topCategories);
                 } else {
-                    Log.e("OverviewFragment", "spendingAdapter is null, cannot update data");
+                    Log.e(TAG, "spendingAdapter is null, cannot update data");
                 }
             });
         }).start();
     }
-
-
 
     private void openNotificationScreen() {
         Intent intent = new Intent(getActivity(), NotificationActivity.class);
@@ -195,11 +185,10 @@ public class OverviewFragment extends Fragment {
     }
 
     public void refreshData() {
-        Log.d("OverviewFragment", "refreshData() called. Refreshing data in OverviewFragment.");
-
-        // Gọi lại các phương thức tải dữ liệu để làm mới UI
+        Log.d(TAG, "refreshData() called. Refreshing data in OverviewFragment.");
         calculateAndDisplayTotalBalance();
         loadTopCategories();
     }
+
 
 }

@@ -119,6 +119,9 @@ public class ChooseCurrencyActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("currencyCode", newSelected.getCurrency_code());
+                editor.apply();
                 int userId = sharedPreferences.getInt("userId", -1);
 
                 if (userId != -1) {
