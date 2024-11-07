@@ -1,10 +1,15 @@
-package com.example.holajicap;
+package com.example.holajicap.model;
 
-public class SpendingData {
+public class CategorySpending {
     private String cateIcon;
     private String cateName;
     private double totalAmount;
-    private double percentage;
+
+    public CategorySpending(String cateIcon, String cateName, double totalAmount) {
+        this.cateIcon = cateIcon;
+        this.cateName = cateName;
+        this.totalAmount = totalAmount;
+    }
 
     // Getters and Setters
     public String getCateIcon() {
@@ -30,13 +35,4 @@ public class SpendingData {
     public void setTotalAmount(double totalAmount) {
         this.totalAmount = totalAmount;
     }
-
-    public double getPercentage() {
-        return percentage;
-    }
-
-    public void setPercentage(double percentage) {
-        this.percentage = percentage;
-    }
 }
-

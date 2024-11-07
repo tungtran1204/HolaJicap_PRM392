@@ -4,12 +4,10 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.holajicap.SpendingData;
-import com.example.holajicap.model.Category;
+import com.example.holajicap.model.CategorySpending;
 import com.example.holajicap.model.Transaction;
 import com.example.holajicap.model.TransactionWithCategory;
 
-import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -47,14 +45,15 @@ public interface TransactionDao {
     @androidx.room.Transaction
     @Query("SELECT * FROM `Transaction` WHERE userId = :userId AND date BETWEEN :startDate AND :endDate")
     List<TransactionWithCategory> getTransactionsWithCategories(int userId, String startDate, String endDate);
-    @Query("SELECT c.cateIcon, c.cateName, SUM(t.amount) AS totalAmount, "
-            + "ROUND((SUM(t.amount) * 100.0 / (SELECT SUM(amount) FROM `Transaction` WHERE userId = :userId)), 2) AS percentage "
+
+    @Query("SELECT c.cateIcon AS cateIcon, c.cateName AS cateName, SUM(t.amount) AS totalAmount "
             + "FROM `Transaction` t "
             + "JOIN Category c ON t.cateId = c.cateId "
-            + "WHERE t.userId = :userId "
-            + "GROUP BY c.cateId "
+            + "WHERE t.userId = :userId AND c.cateType = 'Expenditure' "
+            + "GROUP BY c.cateId, c.cateIcon, c.cateName "
             + "ORDER BY totalAmount DESC "
-            + "LIMIT 3")
-    List<SpendingData> getTopCategoriesWithPercentage(int userId);
+            + "LIMIT 5")
+    List<CategorySpending> getTotalAmountPerCategory(int userId);
+
 
 }

@@ -260,6 +260,8 @@ public class AddTransactionActivity extends AppCompatActivity {
                 // Hiển thị thông báo thành công
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Thêm giao dịch thành công!", Toast.LENGTH_SHORT).show();
+                    Intent resultIntent = new Intent();
+                    setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 });
             } else {

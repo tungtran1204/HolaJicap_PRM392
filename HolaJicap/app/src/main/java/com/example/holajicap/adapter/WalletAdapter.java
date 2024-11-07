@@ -115,4 +115,6 @@ public class WalletAdapter extends RecyclerView.Adapter<WalletAdapter.WalletHold
         }
     }
 
+
+
 }
