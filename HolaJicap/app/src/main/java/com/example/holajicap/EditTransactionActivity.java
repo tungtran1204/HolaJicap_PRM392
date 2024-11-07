@@ -3,7 +3,6 @@ package com.example.holajicap;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,15 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.holajicap.dao.CategoryDao;
 import com.example.holajicap.db.HolaJicapDatabase;
 import com.example.holajicap.model.Transaction;
+import com.example.holajicap.model.Category;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -53,23 +52,17 @@ public class EditTransactionActivity extends AppCompatActivity {
 
         ImageView back_icon = findViewById(R.id.left_icon);
         TextView toolbar_title = findViewById(R.id.toolbar_title);
-        back_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back_icon.setOnClickListener(view -> finish());
         toolbar_title.setText("Chỉnh sửa hoặc xoá giao dịch");
 
         // Nhận dữ liệu từ Intent
         Intent intent = getIntent();
         transactionId = intent.getIntExtra("transactionId", -1); // ID giao dịch
-        double amount = intent.getDoubleExtra("amount", 0);
-        String notes = intent.getStringExtra("notes");
-        selectedDate = intent.getStringExtra("date");
-        selectedWalletId = intent.getIntExtra("walletId", -1);
-        selectedCategoryId = intent.getIntExtra("categoryId", -1);
-        selectedCategoryType = intent.getStringExtra("categoryType");
+        if (transactionId == -1) {
+            Toast.makeText(this, "Giao dịch không hợp lệ", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         // Khởi tạo cơ sở dữ liệu
         db = HolaJicapDatabase.getInstance(getApplicationContext());
@@ -84,10 +77,8 @@ public class EditTransactionActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton); // Khởi tạo nút xóa
         dateTextView = findViewById(R.id.dateTextView);
 
-        // Đổ dữ liệu vào các trường
-        editTextAmount.setText(String.valueOf(amount));
-        editTextNotes.setText(notes);
-        dateTextView.setText(selectedDate); // Đổ ngày vào TextView
+        // Tải dữ liệu giao dịch
+        loadTransactionData();
 
         // Thiết lập sự kiện cho nút lưu
         saveButton.setOnClickListener(view -> {
@@ -103,6 +94,54 @@ public class EditTransactionActivity extends AppCompatActivity {
 
         // Xử lý sự kiện chọn ngày
         dateTextView.setOnClickListener(view -> showDatePickerDialog());
+
+        // Thiết lập sự kiện cho chọn nhóm và chọn phương thức giao dịch
+        tvChooseTransactionType.setOnClickListener(view -> {
+            // Mở Activity chọn nhóm
+            Intent intent1 = new Intent(EditTransactionActivity.this, ChooseTransactionTypeActivity.class);
+            intent1.putExtra("selectedCategoryId", selectedCategoryId);
+            startActivityForResult(intent1, 1);
+        });
+
+        tvChooseWallet.setOnClickListener(view -> {
+            // Mở Activity chọn ví
+            Intent intent1 = new Intent(EditTransactionActivity.this, ChooseWalletActivity.class);
+            intent1.putExtra("selectedWalletId", selectedWalletId);
+            startActivityForResult(intent1, 2);
+        });
+    }
+
+    private void loadTransactionData() {
+        // Tải thông tin giao dịch từ cơ sở dữ liệu
+        Transaction transaction = db.transactionDao().getTransactionById(transactionId);
+        if (transaction != null) {
+            DecimalFormat decimalFormat = new DecimalFormat("#,###");
+            editTextAmount.setText(decimalFormat.format(transaction.getAmount()));
+            editTextNotes.setText(transaction.getNote());
+            dateTextView.setText(transaction.getDate());
+
+            // Lấy và hiển thị thông tin ví
+            selectedWalletId = transaction.getWalletId();
+            if (selectedWalletId != -1) {
+                String walletName = db.walletDao().getWalletById(selectedWalletId).getWalletName(); // Lấy tên ví
+                tvChooseWallet.setText(walletName); // Hiển thị tên ví
+            }
+
+            // Lấy và hiển thị thông tin danh mục
+            selectedCategoryId = transaction.getCateId();
+            if (selectedCategoryId != -1) {
+                Category category = db.categoryDao().getCategoryById(selectedCategoryId); // Lấy danh mục
+                if (category != null) {
+                    tvChooseTransactionType.setText(category.getCateName()); // Hiển thị tên danh mục
+                    // Giả sử cateIcon là một đường dẫn đến tài nguyên drawable
+                    int iconResId = getResources().getIdentifier(category.getCateIcon(), "drawable", getPackageName());
+                    imv_category_ava.setImageResource(iconResId); // Hiển thị biểu tượng danh mục
+                }
+            }
+        } else {
+            Toast.makeText(this, "Không tìm thấy giao dịch", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void showDatePickerDialog() {
@@ -134,30 +173,84 @@ public class EditTransactionActivity extends AppCompatActivity {
 
     private void updateTransaction() throws ParseException {
         // Lấy giá trị từ các trường nhập liệu
-        String amountText = editTextAmount.getText().toString();
+        String amountText = editTextAmount.getText().toString().replace(",", ""); // Xóa dấu phẩy
         if (TextUtils.isEmpty(amountText)) {
             Toast.makeText(this, "Vui lòng nhập số tiền", Toast.LENGTH_SHORT).show();
             return;
         }
         double amount = Double.parseDouble(amountText);
         String notes = editTextNotes.getText().toString();
+
+        // Kiểm tra thông tin ví và loại giao dịch
         String walletType = tvChooseWallet.getText().toString();
         String transactionType = tvChooseTransactionType.getText().toString();
 
-        if (TextUtils.isEmpty(transactionType) || selectedDate == null || TextUtils.isEmpty(walletType)) {
-            Toast.makeText(this, "Vui lòng nhập đủ thông tin ", Toast.LENGTH_SHORT).show();
+        // Lấy thông tin giao dịch cũ
+        Transaction oldTransaction = db.transactionDao().getTransactionById(transactionId);
+        if (oldTransaction == null) {
+            Toast.makeText(this, "Giao dịch không tồn tại", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // Nếu người dùng chưa chọn ngày mới, giữ nguyên ngày cũ
+        if (TextUtils.isEmpty(selectedDate)) {
+            selectedDate = oldTransaction.getDate(); // Giữ nguyên ngày cũ
+        }
+
+        // Nếu loại giao dịch chưa được chọn, lấy từ giao dịch cũ
+        if (TextUtils.isEmpty(transactionType)) {
+            selectedCategoryId = oldTransaction.getCateId();
+            Category category = db.categoryDao().getCategoryById(selectedCategoryId);
+            if (category != null) {
+                transactionType = category.getCateType();
+                tvChooseTransactionType.setText(category.getCateName());
+                int iconResId = getResources().getIdentifier(category.getCateIcon(), "drawable", getPackageName());
+                imv_category_ava.setImageResource(iconResId);
+            }
+        }
+
+        // Nếu ví chưa được chọn, lấy từ giao dịch cũ
+        if (selectedWalletId == -1) {
+            selectedWalletId = oldTransaction.getWalletId();
+            String walletName = db.walletDao().getWalletById(selectedWalletId).getWalletName();
+            tvChooseWallet.setText(walletName);
+        }
+
+
+
+        // Cập nhật giao dịch trong cơ sở dữ liệu
         db.runInTransaction(() -> {
-            // Cập nhật giao dịch trong cơ sở dữ liệu
             Transaction transaction = new Transaction(transactionId, 0, selectedWalletId, amount, notes, selectedDate, selectedCategoryId);
             db.transactionDao().update(transaction.getTransId(), transaction.getAmount(), transaction.getNote(), transaction.getDate(), transaction.getCateId());
+
+            // Cập nhật số dư ví tương ứng
+            double oldAmount = oldTransaction.getAmount();
+            String oldCategoryType = db.categoryDao().getCategoryById(oldTransaction.getCateId()).getCateType();
+
+            // Điều chỉnh số dư ví cho giao dịch cũ
+            if (oldCategoryType.equals("Expenditure")) {
+                db.walletDao().updateWalletBalance(selectedWalletId, oldAmount); // Hoàn lại số tiền
+            } else if (oldCategoryType.equals("Revenue")) {
+                db.walletDao().updateWalletBalance(selectedWalletId, -oldAmount); // Hoàn lại số tiền
+            }
+
+            // Cập nhật số dư ví với giao dịch mới
+            String newCategoryType = db.categoryDao().getCategoryById(selectedCategoryId).getCateType();
+            if (newCategoryType.equals("Expenditure")) {
+                db.walletDao().updateWalletBalance(selectedWalletId, -amount); // Trừ số tiền mới
+            } else if (newCategoryType.equals("Revenue")) {
+                db.walletDao().updateWalletBalance(selectedWalletId, amount); // Cộng số tiền mới
+            }
 
             // Hiển thị thông báo thành công
             runOnUiThread(() -> {
                 Toast.makeText(this, "Cập nhật giao dịch thành công!", Toast.LENGTH_SHORT).show();
-                finish();
+
+                // Khởi động lại ViewTransactionActivity
+                Intent intent = new Intent(EditTransactionActivity.this, ViewTransactionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Đảm bảo rằng Activity trước đó sẽ được khởi động lại.
+                startActivity(intent);
+                finish(); // Kết thúc EditTransactionActivity
             });
         });
     }
@@ -193,7 +286,7 @@ public class EditTransactionActivity extends AppCompatActivity {
                     Toast.makeText(this, "Giao dịch đã được xóa!", Toast.LENGTH_SHORT).show();
                     // Gửi Intent để yêu cầu ViewTransactionActivity cập nhật dữ liệu
                     Intent intent = new Intent(EditTransactionActivity.this, ViewTransactionActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Đảm bảo rằng Activity trước đó sẽ được khởi động lại.
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Đảm bảo rằng Activity trước đó sẽ được khởi động lại.
                     startActivity(intent);
                     finish();
                 });
@@ -201,4 +294,23 @@ public class EditTransactionActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            if (requestCode == 1) { // Chọn nhóm
+                selectedCategoryId = data.getIntExtra("selectedCategoryId", -1);
+                Category category = db.categoryDao().getCategoryById(selectedCategoryId); // Lấy danh mục
+                if (category != null) {
+                    tvChooseTransactionType.setText(category.getCateName()); // Hiển thị tên danh mục
+                    int iconResId = getResources().getIdentifier(category.getCateIcon(), "drawable", getPackageName());
+                    imv_category_ava.setImageResource(iconResId); // Hiển thị biểu tượng danh mục
+                }
+            } else if (requestCode == 2) { // Chọn ví
+                selectedWalletId = data.getIntExtra("selectedWalletId", -1);
+                String walletName = db.walletDao().getWalletById(selectedWalletId).getWalletName(); // Giả sử có phương thức này
+                tvChooseWallet.setText(walletName);
+            }
+        }
+    }
 }
